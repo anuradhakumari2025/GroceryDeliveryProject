@@ -1,0 +1,21 @@
+# 🛒 Grocery Cart Backend
+
+This is the backend server for the **Grocery Cart** application, built using **Node.js**, **Express.js**, and **MongoDB**. It handles all the core functionalities like user authentication, product management, cart handling, and order processing.
+
+---
+
+## 🔧 Tech Stack
+
+- **Node.js**
+- **Express.js**
+- **MongoDB** (with Mongoose)
+- **Cloudinary** (for image uploads)
+- **Multer** (for file handling)
+- **JWT** (for authentication)
+- **Nodemon** (for development)
+
+---
+
+## 📁 Project Structure
+
+/backend ├── controllers/ │ └── ProductController.js │ └── UserController.js ├── middleware/ │ └── AuthUser.js │ └── AuthSeller.js ├── models/ │ └── Product.js │ └── User.js ├── routes/ │ └── ProductRoute.js │ └── UserRoute.js ├── configs/ │ └── db.js │ └── multer.js ├── .env ├── server.js
