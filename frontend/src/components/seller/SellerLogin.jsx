@@ -1,16 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const SellerLogin = () => {
-  const { setIsSeller, isSeller, navigate } = useAppContext();
+  const { setIsSeller, isSeller, navigate,axios } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    setIsSeller(true)
-    setEmail("");
-    setPassword("");
+  const submitHandler = async (e) => {
+    try {
+      e.preventDefault();
+      const { data } = await axios.post("/seller/login", {
+        email,
+        password,
+      });
+      if (data.success) {
+        setIsSeller(true);
+        navigate("/seller");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
   useEffect(() => {
     if (isSeller) {
@@ -19,9 +32,7 @@ const SellerLogin = () => {
   }, [isSeller]);
   return (
     !isSeller && (
-      <div
-        className="fixed inset-0 top-0 left-0 right-0 z-30 flex items-center text-sm text-gray-600 bg-black/50"
-      >
+      <div className="fixed inset-0 top-0 left-0 right-0 z-30 flex items-center text-sm text-gray-600 bg-black/50">
         <form
           onSubmit={submitHandler}
           onClick={(e) => e.stopPropagation()}

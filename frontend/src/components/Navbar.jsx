@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { NavLink } from "react-router";
 import { assets } from "../assets/greencart_assets/assets";
+import toast from "react-hot-toast";
 
 const Navbar = () => {
   const {
@@ -12,11 +13,23 @@ const Navbar = () => {
     searchQuery,
     setSearchQuery,
     getCartCount,
+    axios,
   } = useAppContext();
   const [open, setOpen] = useState(false);
   const logout = async () => {
-    setUser(null);
-    navigate("/");
+    try {
+      const { data } = await axios.get("/user/logout");
+      if (data.success) {
+        toast.success(data.message);
+        setUser(null);
+        navigate("/");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
   useEffect(() => {
     if (searchQuery.length > 0) {
@@ -80,7 +93,7 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center gap-6 sm:hidden">
-      <div
+        <div
           onClick={() => navigate("/cart")}
           className="cursor-pointer relative"
         >

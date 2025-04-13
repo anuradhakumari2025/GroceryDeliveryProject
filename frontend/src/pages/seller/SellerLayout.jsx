@@ -2,12 +2,23 @@ import React from "react";
 import { assets } from "../../assets/greencart_assets/assets";
 import { useAppContext } from "../../context/AppContext";
 import { NavLink, Outlet } from "react-router";
+import toast from "react-hot-toast";
 
 const SellerLayout = () => {
-  const { setIsSeller, navigate } = useAppContext();
-  const logout = () => {
-    navigate("/");
-    setIsSeller(false);
+  const { setIsSeller, navigate, axios } = useAppContext();
+  const logout = async () => {
+    try {
+      const { data } = await axios.get("/seller/logout");
+      if (data.success) {
+        setIsSeller(false);
+        toast.success(data.message);
+        navigate("/");
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -32,7 +43,7 @@ const SellerLayout = () => {
 
       {/* Sidebar */}
       <div className="flex">
-        <div className="md:w-64 w-16 h-[550px] text-base border-gray-300 pt-4 flex flex-col transition-all duration-300 bg-white border-r">
+        <div className="md:w-64 w-16 h-[95vh] text-base border-gray-300 pt-4 flex flex-col bg-white border-r">
           <NavLink
             className={({ isActive }) =>
               `flex items-center gap-3 py-3 px-4 cursor-pointer  duration-200 ${
@@ -42,7 +53,7 @@ const SellerLayout = () => {
               }`
             }
             to={"/seller"}
-            end={'/seller'}
+            end={"/seller"}
           >
             <img src={assets.add_icon} alt="" />
             <p className="hidden md:block text-center">Add Product</p>
@@ -57,7 +68,7 @@ const SellerLayout = () => {
               }`
             }
             to={"/seller/product-list"}
-            end={'/seller'}
+            end={"/seller"}
           >
             <img src={assets.product_list_icon} alt="" />
             <p className="hidden md:block text-center"> Product List</p>
@@ -72,7 +83,7 @@ const SellerLayout = () => {
               }`
             }
             to={"/seller/orders"}
-            end={'/seller'}
+            end={"/seller"}
           >
             <img src={assets.order_icon} alt="" />
             <p className="hidden md:block text-center">Orders</p>
