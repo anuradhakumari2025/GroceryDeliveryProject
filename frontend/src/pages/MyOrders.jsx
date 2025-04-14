@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import { dummyOrders } from "../assets/greencart_assets/assets";
+import toast from "react-hot-toast";
 
 const MyOrders = () => {
   const [myOrders, setMyOrders] = useState([]);
-  const { currency } = useAppContext();
+  const { currency, axios, user } = useAppContext();
 
   const fetchMyOrders = async () => {
-    setMyOrders(dummyOrders);
+    try {
+      const { data } = await axios.get("/order/user");
+      if (data.success) {
+        setMyOrders(data.orders);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
   useEffect(() => {
-    fetchMyOrders();
-  }, []);
+    if (user) {
+      fetchMyOrders();
+    }
+  }, [user]);
   return (
     <div className="mt-12 flex flex-col">
       <div className=" flex flex-col items-end w-max mb-10">

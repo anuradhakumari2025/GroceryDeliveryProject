@@ -112,7 +112,7 @@ const ProductDetails = () => {
                 <ProductCard key={idx} product={item} />
               ))}
           </div>
-          <button onClick={()=>{navigate('/products');scrollTo(0,0)}} className="mx-auto cursor-pointer px-12 py-2.5 border rounded text-primary hover:bg-primary-dull transition hover:text-white ">See More </button>
+          <button onClick={()=>{navigate('/products');scrollTo(0,0)}} className="mx-auto mt-8 cursor-pointer px-12 py-2.5 border rounded text-primary hover:bg-primary-dull transition hover:text-white ">See More </button>
         </div>
       </div>
     )

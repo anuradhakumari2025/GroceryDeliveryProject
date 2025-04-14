@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { assets, dummyAddress } from "../assets/greencart_assets/assets";
+import toast from "react-hot-toast";
 
 const Cart = () => {
   const {
@@ -9,15 +10,18 @@ const Cart = () => {
     removeFromCart,
     getCartCount,
     navigate,
-    updateCartItem,
+    updateCart,
     cartItems,
+    setCartItems,
     getCartAmount,
+    axios,
+    user,
   } = useAppContext();
 
   const [cartArray, setCartArray] = useState([]);
-  const [addresses, setAddresses] = useState(dummyAddress);
+  const [addresses, setAddresses] = useState([]);
   const [showAddress, setShowAddress] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentOption, setPaymentOption] = useState("COD");
 
   const getCart = () => {
@@ -30,13 +34,142 @@ const Cart = () => {
     setCartArray(tempArray);
   };
 
-  const placeOrder = async () => {};
+  const getUserAddress = async () => {
+    try {
+      const { data } = await axios.get("/address/get");
+      if (data.success) {
+        setAddresses(data.addresses);
+        if (data.addresses.length > 0) {
+          setSelectedAddress(data.addresses[0]);
+        }
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  const placeOrder = async () => {
+    try {
+      if (!selectedAddress) {
+        return toast.error("Please select address");
+      }
+      if (paymentOption === "COD") {
+        const { data } = await axios.post("/order/cod", {
+          items: cartArray.map((item, idx) => ({
+            product: item._id,
+            quantity: item.quantity,
+          })),
+          address: selectedAddress._id,
+        });
+        if (data.success) {
+          toast.success(data.message);
+          setCartItems({});
+          navigate("/my-orders");
+        } else {
+          toast.error(data.message);
+        }
+      } else {
+        //payment using razorpay
+        const { data } = await axios.post("/order/razorpay", {
+          items: cartArray.map((item, idx) => ({
+            product: item._id,
+            quantity: item.quantity,
+          })),
+          address: selectedAddress._id,
+        });
+
+        // console.log("Razorpay Order Response:", data); // Debugging
+
+        if (!data.success) {
+          toast.error(data.message);
+        }
+
+        const options = {
+          key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Razorpay Key ID from .env
+          amount: data.amount,
+          currency: data.currency,
+          name: "Grocery Delivery",
+          description: "Order Payment",
+          order_id: data.razorpayOrderId, // Razorpay order ID
+          handler: async (response) => {
+            console.log("Razorpay Response:", response); // Debugging
+
+            const {
+              razorpay_order_id,
+              razorpay_payment_id,
+              razorpay_signature,
+            } = response;
+
+            if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+              return toast.error("Payment failed. Please try again.");
+            }
+
+            // Verify payment on the backend
+            const verifyResponse = await axios.post("/order/verify", {
+              razorpay_order_id,
+              razorpay_payment_id,
+              razorpay_signature,
+            });
+
+            console.log(verifyResponse)
+
+            if (verifyResponse.data.success) {
+              toast.success("Payment successful!");
+              setCartItems({});
+              navigate("/my-orders");
+            } else {
+              toast.error("Payment verification failed");
+            }
+          },
+          prefill: {
+            name: user?.name || "Anuradha Kumari",
+            email: user?.email || "anu@gmail.com",
+            contact: "9999999999",
+          },
+          theme: {
+            color: "#3399cc",
+          },
+        };
+
+        // console.log("Razorpay Options from frontend:", options);
+
+        const razorpay = new window.Razorpay(options);
+        razorpay.open();
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  };
 
   useEffect(() => {
     if (products.length > 0 && cartItems) {
       getCart();
     }
   }, [products, cartItems]);
+
+  const fetchCartItems = async () => {
+    try {
+      const { data } = await axios.get("/cart/get");
+      if (data.success) {
+        setCartItems(data.cartItems); // Update cartItems in context
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+  useEffect(() => {
+    if (user) {
+      fetchCartItems();
+      getUserAddress();
+    }
+  }, [user]);
   return products.length > 0 && cartItems ? (
     <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
       <div className="flex-1 max-w-4xl">
@@ -77,10 +210,11 @@ const Cart = () => {
                     <select
                       value={cartItems[product._id]}
                       onChange={(e) =>
-                        updateCartItem(product._id, Number(e.target.value))
+                        updateCart(product._id, Number(e.target.value))
                       }
                       name="outline-none"
                       id=""
+                      className="pl-2 outline-none"
                     >
                       {Array(
                         cartArray[product._id] > 9 ? cartArray[product._id] : 9
@@ -153,7 +287,7 @@ const Cart = () => {
                       setSelectedAddress(address);
                       setShowAddress(false);
                     }}
-                    className="text-gray-500 p-2"
+                    className="text-gray-500 p-2 cursor-pointer"
                   >
                     {address.street},{address.city}, {address.state},
                     {address.country}
