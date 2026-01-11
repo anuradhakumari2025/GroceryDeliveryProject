@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { dummyProducts } from "../assets/greencart_assets/assets";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -76,6 +75,7 @@ export const AppContextProvider = ({ children }) => {
     setCartItems(cartData);
     toast.success("Item added to cart");
   };
+
   const updateCart = (itemId, quantity) => {
     let cartData = structuredClone(cartItems);
     cartData[itemId] = quantity;

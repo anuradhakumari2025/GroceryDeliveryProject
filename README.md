@@ -6,8 +6,32 @@ A full-stack **Grocery Delivery Web App** that allows users to browse grocery it
 
 ## 📁 Folder Structure
 
-groceryDeliveryProject/ ├── frontend/ # React.js + Tailwind CSS frontend └── backend/ # Node.js + Express + MongoDB backend
+Frontend /frontend
+```bash
+groceryDeliveryProject/ 
+├──frontend/
+ ├── components/
+ ├── pages/
+ ├── assets/
+ ├── App.jsx
+ ├── main.jsx
+ ├── index.css
+```
 
+Backend /backend
+```bash
+groceryDeliveryProject/ 
+├──backend/
+ ├── src/
+  ├── controllers/
+  ├── routes/
+  ├── models/
+  ├── middleware/
+  ├── configs/
+  ├── app.js
+ ├── server.js
+ ├── .env
+```
 
 ---
 
@@ -117,10 +141,11 @@ Copy
 Edit
 cd frontend
 📦 Install Dependencies
-bash
+```bash
 Copy
 Edit
 npm install
+```
 📁 Environment Variables (Optional)
 If using environment variables (e.g., for base API URL), create a .env file:
 
@@ -156,30 +181,6 @@ View all products
 Update stock
 
 Manage orders
-
-📦 Folder Highlights
-Frontend /frontend
-```bash
-/frontend
-├── components/
-├── pages/
-├── assets/
-├── App.jsx
-├── main.jsx
-├── index.css
-```
-
-Backend /backend
-```bash
-/backend
- ├── controllers/
- ├── routes/
- ├── models/
- ├── middleware/
- ├── configs/
- ├── server.js
- ├── .env
-```
 
 📤 Deployment Suggestions
 Backend
