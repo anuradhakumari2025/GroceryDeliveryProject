@@ -61,6 +61,7 @@ const Login = () => {
         <div className="w-full">
           <p>Email</p>
           <input
+            name="email"
             type="email"
             placeholder="type here"
             className="border border-primary rounded w-full p-2 mt-1 outline-primary"
@@ -71,6 +72,7 @@ const Login = () => {
         <div className="w-full">
           <p>Password</p>
           <input
+            name="password"
             type="password"
             placeholder="type here"
             className="border border-primary rounded w-full p-2 mt-1 outline-primary"
@@ -99,7 +101,7 @@ const Login = () => {
             </span>
           </p>
         )}
-        <button className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer">
+        <button className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer" type="submit">
           {state === "register" ? "Create account" : "Login"}
         </button>
       </form>

@@ -13,7 +13,7 @@ const app = express();
 
 
 //allow multiple origins
-const allowedOrigins = ["http://localhost:5173"];
+const allowedOrigins = ["http://localhost:5173","https://grocery-delivery-project-alpha.vercel.app"];
 
 //Middleware
 app.use(express.json());

@@ -38,9 +38,12 @@ const Navbar = () => {
   }, [searchQuery]);
   return (
     <nav className="flex items-center justify-between px-4 md:px-14 py-4 border-b border-gray-300 bg-white relative transition-all duration-300">
+
+      {/* logo */}
       <NavLink to="/" onClick={() => setOpen(false)}>
         <img src={assets.logo} className="h-9" alt="logo" />
       </NavLink>
+
       <div className="sm:flex items-center z-30 hidden gap-8">
         <NavLink to="/">Home</NavLink>
         <NavLink to="/products">All Products</NavLink>
@@ -67,9 +70,10 @@ const Navbar = () => {
             {getCartCount()}
           </button>
         </div>
+
         {user ? (
           <div className=" relative group cursor-pointer">
-            <img src={assets.profile_icon} alt="" className="w-10" />
+            <img src={assets.profile_icon} alt="profile" className="w-10" />
             <ul className="absolute top-9 hidden group-hover:block border border-gray-200 w-30 rounded-md py-3.5 px-2 text-sm z-30 right-0 bg-white shadow ">
               <li
                 onClick={() => navigate("/my-orders")}
@@ -77,7 +81,7 @@ const Navbar = () => {
               >
                 My Orders
               </li>
-              <li onClick={logout} className="hover:bg-primary/10 pl-2 p-1.5">
+              <li onClick={logout} name="logout" className="hover:bg-primary/10 pl-2 p-1.5">
                 Logout
               </li>
             </ul>
@@ -86,6 +90,7 @@ const Navbar = () => {
           <button
             onClick={() => setShowUserLogin(true)}
             className="px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full cursor-pointer"
+            name="login"
           >
             Login
           </button>
@@ -110,6 +115,8 @@ const Navbar = () => {
           <img src={assets.menu_icon} alt="Menu icon" />
         </button>
       </div>
+
+
       {open && (
         <div
           className={`${
@@ -130,6 +137,8 @@ const Navbar = () => {
           <NavLink to="/" onClick={() => setOpen(false)}>
             Contact
           </NavLink>
+
+          {/* logout/login button */}
           {user ? (
             <button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
               Logout
