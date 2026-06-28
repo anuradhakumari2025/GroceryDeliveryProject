@@ -3,9 +3,9 @@ name: Playwright End-to-End Tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   test:
@@ -18,7 +18,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: lts/*
+          node-version: "22"
 
       - name: Install Backend Dependencies
         run: npm ci
@@ -36,10 +36,29 @@ jobs:
         run: npx playwright install --with-deps
         working-directory: e2e-tests
 
+      # GENERATE THE DATA FILE DYNAMICALLY
+      - name: Create Test Credentials JSON File
+        run: |
+          mkdir -p data
+          echo '${{ secrets.TEST_CREDENTIALS_JSON }}' > data/credentials.env.json
+        working-directory: e2e-tests
+
       - name: Run Playwright Tests
-        # This injects the hidden GitHub secrets into the VM environment variables
         env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
+          PORT: ${{secrets.PORT}}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
           CLOUDINARY_URL: ${{ secrets.CLOUDINARY_URL }}
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          CLOUDINARY_CLOUD_NAME: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NODE_ENV: ${{ secrets.NODE_ENV }}
+          RAZORPAY_KEY_ID: ${{ secrets.RAZORPAY_KEY_ID }}
+          RAZORPAY_SECRET_KEY: ${{ secrets.RAZORPAY_SECRET_KEY }}
+          SELLER_EMAIL: ${{ secrets.SELLER_EMAIL }}
+          SELLER_PASSWORD: ${{ secrets.SELLER_PASSWORD }}
+          VITE_CURRENCY: ${{ secrets.VITE_CURRENCY }}
+          VITE_RAZORPAY_KEY_ID: ${{ secrets.VITE_RAZORPAY_KEY_ID }}
+          VITE_BACKEND_URL: ${{secrets.VITE_BACKEND_URL}}
         run: npx playwright test
         working-directory: e2e-tests
