@@ -27,10 +27,13 @@ const AddProduct = () => {
       // console.log(productData)
       const formData = new FormData();
       formData.append("productData", JSON.stringify(productData));
+
       for (let i = 0; i < files.length; i++) {
         formData.append("images", files[i]);
       }
+
       const { data } = await axios.post("/product/add", formData);
+
       if (data.success) {
         setName("");
         setDescription("");
@@ -73,6 +76,7 @@ const AddProduct = () => {
                     }}
                   />
                   <img
+                  name="product-image"
                     className="max-w-24 cursor-pointer"
                     src={
                       files[index]

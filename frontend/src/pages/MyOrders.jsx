@@ -24,6 +24,7 @@ const MyOrders = () => {
       fetchMyOrders();
     }
   }, [user]);
+  
   return (
     <div className="mt-12 flex flex-col">
       <div className=" flex flex-col items-end w-max mb-10">

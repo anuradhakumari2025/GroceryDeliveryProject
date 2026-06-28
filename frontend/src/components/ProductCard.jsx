@@ -31,8 +31,8 @@ const ProductCard = ({ product }) => {
               ))}
             <p> 4 </p>
           </div>
-          <div className="flex items-end justify-between my-2">
-            <p className="md:text-xl text-base font-medium text-primary">
+          <div className="flex flex-col gap-2 lg:items-end justify-between my-2">
+            <p className="md:text-xl text-sm font-medium text-primary">
               {currency} {product.offerPrice}{" "}
               <span className="text-gray-500/60 md:text-sm text-xs line-through">
                 {currency} {product.price}
@@ -41,7 +41,7 @@ const ProductCard = ({ product }) => {
             <div onClick={(e)=>{e.stopPropagation()}} className="text-primary">
               {!cartItems[product._id] ? (
                 <button
-                  className="flex items-center justify-center gap-1 bg-primary/10 border border-primary/60 md:w-[80px] w-[60px] h-[34px] rounded text-primary font-medium cursor-pointer"
+                  className="flex items-center justify-center gap-1 bg-primary/10 border border-primary/60 md:w-[80px] w-[60px] h-[30px] rounded text-primary text-sm md:font-medium cursor-pointer"
                   onClick={() => {addToCart(product._id)}}
                 >
                   <img src={assets.cart_icon} alt="" />

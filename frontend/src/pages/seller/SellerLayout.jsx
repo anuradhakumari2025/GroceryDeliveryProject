@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 const SellerLayout = () => {
   const { setIsSeller, navigate, axios } = useAppContext();
+
   const logout = async () => {
     try {
       const { data } = await axios.get("/seller/logout");
@@ -20,6 +21,7 @@ const SellerLayout = () => {
       console.log(error);
     }
   };
+  
   return (
     <>
       <div className="flex justify-between items-center md:px-8 border-gray-300 px-4 sm:px-10 py-3 border-b transition-all duration-300 bg-white">
@@ -31,7 +33,7 @@ const SellerLayout = () => {
           />
         </div>
         <div className="flex items-center gap-4 text-gray-500">
-          <p className=" text-gray-600">Hi! Seller</p>
+          <p className="text-gray-600">Hi! Seller</p>
           <button
             onClick={logout}
             className="bg-primary text-white text-sm px-10 py-2 rounded-full"

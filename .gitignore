@@ -1,0 +1,38 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies and Build Outputs (Matches any folder)
+**/node_modules/
+**/dist/
+**/dist-ssr/
+**/*.local
+
+# Editor directories and files
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# CRITICAL: Ignore all environment secret files anywhere in the project
+**/.env
+**/.env.*
+**/tests/data/credentials.env.json
+
+**/src/components/Test.jsx
+
+# Playwright Test Artifacts (Matches any folder)
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/playwright/.cache/
+**/playwright/.auth/
+**/.playwright-artifacts/

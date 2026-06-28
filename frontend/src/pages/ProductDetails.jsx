@@ -5,7 +5,7 @@ import { assets } from "../assets/greencart_assets/assets";
 import ProductCard from "../components/ProductCard";
 
 const ProductDetails = () => {
-  const { products, navigate, currency, addToCart } = useAppContext();
+  const { products, navigate, currency, addToCart,user } = useAppContext();
   const { id } = useParams();
   const product = products.find((item) => item._id === id);
 
@@ -20,9 +20,11 @@ const ProductDetails = () => {
       setRelatedProducts(productsCopy.slice(0, 5));
     }
   }, [products]);
+
   useEffect(() => {
     setThumbnail(product?.image[0] ? product.image[0] : null);
   }, [product]);
+
   return (
     product && (
       <div className="max-w-6xl w-full px-6 mt-12">
@@ -59,6 +61,7 @@ const ProductDetails = () => {
                   <img
                     src={i < 4 ? assets.star_icon : assets.star_dull_icon}
                     alt=""
+                    key={product._id + i}
                     className="md:w-4 w-3.5"
                   />
                 ))}
@@ -89,8 +92,8 @@ const ProductDetails = () => {
               </button>
               <button
                 onClick={() => {
-                  addToCart(product._id);
-                  navigate("/cart");
+                 addToCart(product._id);
+                  user ? navigate("/cart"): navigate("/login");
                 }}
                 className="w-full py-3.5 cursor-pointer font-medium bg-primary text-white hover:bg-primary-dull transition"
               >
@@ -99,6 +102,8 @@ const ProductDetails = () => {
             </div>
           </div>
         </div>
+
+        
         {/* Related Products */}
         <div className="flex flex-col items-center mt-20 ">
           <div className="flex flex-col items-center w-max">

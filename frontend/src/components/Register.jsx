@@ -3,24 +3,24 @@ import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
 import { Eye, EyeOff } from "lucide-react"; 
 
-const Login = () => {
+const Register = () => {
   const { setUser, axios, navigate } = useAppContext();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // UPDATED: Added state to toggle password visibility
   const [showPassword, setShowPassword] = useState(false);
 
   const submitHandler = async (e) => {
     try {
       e.preventDefault();
-      // UPDATED: Changed the endpoint strictly to '/user/login'
-      const { data } = await axios.post("/user/login", {
+
+      const { data } = await axios.post("/user/register", {
+        name,
         email,
         password,
       });
       if (data.success) {
-        // UPDATED: Added destination route target back into navigate
         navigate("/");
         setUser(data.user);
         toast.success(data.message);
@@ -41,15 +41,27 @@ const Login = () => {
         className="flex flex-col gap-4 m-auto items-start p-8 py-12 w-80 sm:w-[352px] rounded-lg border border-gray-200 bg-white"
       >
         <p className="text-2xl font-medium m-auto">
-          <span className="text-primary">User </span> Login
+          <span className="text-primary">User </span> Sign Up
         </p>
+
+        <div className="w-full">
+          <p>Name</p>
+          <input
+            type="text"
+            name="name"
+            placeholder="user"
+            className="border border-primary rounded w-full p-2 mt-1 outline-primary"
+            required
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
 
         <div className="w-full">
           <p>Email</p>
           <input
             name="email"
             type="email"
-            placeholder="type here"
+            placeholder="user@example.com"
             className="border border-primary rounded w-full p-2 mt-1 outline-primary"
             required
             onChange={(e) => setEmail(e.target.value)}
@@ -58,18 +70,16 @@ const Login = () => {
 
         <div className="w-full">
           <p>Password</p>
-          {/* UPDATED: Added relative wrapper wrapper container for positioning the absolute icon eye */}
           <div className="relative w-full">
             <input
               name="password"
-              // UPDATED: Condition dynamically changes input type
               type={showPassword ? "text" : "password"}
-              placeholder="type here"
+              placeholder="user123"
               className="border border-primary rounded w-full p-2 pr-10 mt-1 outline-primary"
               required
               onChange={(e) => setPassword(e.target.value)}
             />
-            {/* UPDATED: Interactive visibility toggle icon container */}
+
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
@@ -80,12 +90,11 @@ const Login = () => {
           </div>
         </div>
 
-        {/* UPDATED: Navigates using React Router wrapper paths instead of toggle internal state */}
         <p>
-          Create an account?{" "}
+          Already have an account?{" "}
           <span
             className="text-primary cursor-pointer hover:underline"
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/login")}
           >
             click here
           </span>
@@ -95,11 +104,11 @@ const Login = () => {
           className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer"
           type="submit"
         >
-          Login
+          Register
         </button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Register;

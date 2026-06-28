@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import { NavLink } from "react-router";
 import { assets } from "../assets/greencart_assets/assets";
@@ -15,7 +15,9 @@ const Navbar = () => {
     getCartCount,
     axios,
   } = useAppContext();
+
   const [open, setOpen] = useState(false);
+
   const logout = async () => {
     try {
       const { data } = await axios.get("/user/logout");
@@ -31,14 +33,24 @@ const Navbar = () => {
       toast.error(error.message);
     }
   };
-  useEffect(() => {
-    if (searchQuery.length > 0) {
+
+  // UPDATED: Removed the automatic useEffect redirect loop to prevent UX disruption while typing.
+  // Instead, added this explicit search keydown handler for a better user experience.
+  const handleSearchSubmit = (e) => {
+    if (e.key === "Enter" && searchQuery.trim().length > 0) {
       navigate("/products");
     }
-  }, [searchQuery]);
+  };
+
+  // UPDATED: Created a centralized login handler to sync navigation, modal visibility, and mobile menu state.
+  const handleLoginClick = () => {
+    navigate("/login");
+    setShowUserLogin(true);
+    setOpen(false);
+  };
+
   return (
     <nav className="flex items-center justify-between px-4 md:px-14 py-4 border-b border-gray-300 bg-white relative transition-all duration-300">
-
       {/* logo */}
       <NavLink to="/" onClick={() => setOpen(false)}>
         <img src={assets.logo} className="h-9" alt="logo" />
@@ -49,13 +61,19 @@ const Navbar = () => {
         <NavLink to="/products">All Products</NavLink>
         <NavLink to="/">Contact</NavLink>
         <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
+          {/* UPDATED: Added value binding and onKeyDown listener for structured search submission */}
           <input
+            value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearchSubmit}
             type="text"
             placeholder="Search Products"
             className="py-1.5 w-full bg-transparent outline-none placeholder-gray-500"
           />
           <img
+            onClick={() =>
+              searchQuery.trim().length > 0 && navigate("/products")
+            }
             src={assets.search_icon}
             alt="Search icon"
             className="h-4 w-4 cursor-pointer"
@@ -81,14 +99,19 @@ const Navbar = () => {
               >
                 My Orders
               </li>
-              <li onClick={logout} name="logout" className="hover:bg-primary/10 pl-2 p-1.5">
+              <li
+                onClick={logout}
+                name="logout"
+                className="hover:bg-primary/10 pl-2 p-1.5"
+              >
                 Logout
               </li>
             </ul>
           </div>
         ) : (
+          /* UPDATED: Tied the desktop login button to the centralized handler for instant navigation */
           <button
-            onClick={() => setShowUserLogin(true)}
+            onClick={handleLoginClick}
             className="px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full cursor-pointer"
             name="login"
           >
@@ -116,12 +139,12 @@ const Navbar = () => {
         </button>
       </div>
 
-
       {open && (
+        /* UPDATED: Changed the breakpoint wrapper utility from md:hidden to sm:hidden to eliminate layout overlapping */
         <div
           className={`${
             open ? "flex" : "hidden"
-          } absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 z-50 text-sm md:hidden`}
+          } absolute top-[60px] left-0 w-full bg-white shadow-md py-4 flex-col items-start gap-2 px-5 z-50 text-sm sm:hidden`}
         >
           <NavLink to="/" onClick={() => setOpen(false)}>
             Home
@@ -140,16 +163,21 @@ const Navbar = () => {
 
           {/* logout/login button */}
           {user ? (
-            <button className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm">
+            /* UPDATED: Assigned the logout function and menu closing logic to the mobile logout button */
+            <button
+              onClick={() => {
+                logout();
+                setOpen(false);
+              }}
+              className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm"
+            >
               Logout
             </button>
           ) : (
+            /* UPDATED: Tied the mobile login button to the centralized handler for consistency */
             <button
               className="cursor-pointer px-6 py-2 mt-2 bg-primary hover:bg-primary-dull transition text-white rounded-full text-sm"
-              onClick={() => {
-                setOpen(false);
-                setShowUserLogin(true);
-              }}
+              onClick={handleLoginClick}
             >
               Login
             </button>

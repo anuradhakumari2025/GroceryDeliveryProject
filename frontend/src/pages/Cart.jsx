@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
-import { assets, dummyAddress } from "../assets/greencart_assets/assets";
+import { assets } from "../assets/greencart_assets/assets";
 import toast from "react-hot-toast";
 
 const Cart = () => {
@@ -58,7 +58,7 @@ const Cart = () => {
       }
       if (paymentOption === "COD") {
         const { data } = await axios.post("/order/cod", {
-          items: cartArray.map((item, idx) => ({
+          items: cartArray.map((item) => ({
             product: item._id,
             quantity: item.quantity,
           })),
@@ -74,7 +74,7 @@ const Cart = () => {
       } else {
         //payment using razorpay
         const { data } = await axios.post("/order/razorpay", {
-          items: cartArray.map((item, idx) => ({
+          items: cartArray.map((item) => ({
             product: item._id,
             quantity: item.quantity,
           })),
@@ -170,6 +170,7 @@ const Cart = () => {
       getUserAddress();
     }
   }, [user]);
+
   return products.length > 0 && cartItems ? (
     <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
       <div className="flex-1 max-w-4xl">
@@ -182,9 +183,10 @@ const Cart = () => {
           <p className="text-center">Subtotal</p>
           <p className="text-center">Action</p>
         </div>
-        {cartArray.map((product, idx) => (
+
+        {cartArray.map((product) => (
           <div
-            key={idx}
+            key={product._id}
             className="grid grid-cols-[2fr_1fr_1fr] text-primary items-center text-sm md:text-base font-medium pt-3"
           >
             <div className="flex items-center md:gap-6 gap-3">
@@ -246,6 +248,7 @@ const Cart = () => {
             </button>
           </div>
         ))}
+
         <button
           onClick={() => {
             navigate("/products");
@@ -261,6 +264,8 @@ const Cart = () => {
           Continue Shopping
         </button>
       </div>
+
+      {/* Order Summary Section */}
       <div className="max-w-[360px] w-full bg-primary/20 p-5 max-md:mt-16 border border-primary/70 ">
         <h2 className="text-xl md:text-2xl font-medium">Order Summary</h2>
         <hr className="border-gray-300 my-5" />
@@ -278,6 +283,7 @@ const Cart = () => {
             >
               Change
             </button>
+
             {showAddress && (
               <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full">
                 {addresses.map((address, idx) => (
@@ -302,6 +308,7 @@ const Cart = () => {
               </div>
             )}
           </div>
+
           <p className="text-sm font-medium uppercase mt-6">Payment Method</p>
           <select
             onChange={(e) => setPaymentOption(e.target.value)}
