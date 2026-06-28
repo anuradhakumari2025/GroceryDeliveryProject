@@ -39,7 +39,7 @@ jobs:
       # GENERATE THE DATA FILE DYNAMICALLY
       - name: Create Test Credentials JSON File
         run: |
-          mkdir -p data
+          mkdir -p tests/data
           echo '${{ secrets.TEST_CREDENTIALS_JSON }}' > tests/data/credentials.env.json
         working-directory: e2e-tests
 

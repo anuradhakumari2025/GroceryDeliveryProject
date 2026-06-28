@@ -5,12 +5,38 @@ import jwt from "jsonwebtoken";
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
-    if (!name || !email || !password) {
-      return res.json({ success: false, message: "Please fill all fields" });
+
+    if (!email) {
+      return res.json({ success: false, message: "Email is required" });
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.json({
+        success: false,
+        message:
+          "Invalid email format",
+      });
+    }
+
+    if (!name) {
+      return res.json({ success: false, message: "Name is required" });
+    }
+
+    if (!password) {
+      return res.json({ success: false, message: "Password is required" });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.json({ success: false, message: "User already exists" });
+    }
+
+    if (password.length < 4) {
+      return res.json({
+        success: false,
+        message: "Password must be at least 4 characters",
+      });
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -19,6 +45,7 @@ export const register = async (req, res) => {
       email,
       password: hashPassword,
     });
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
@@ -44,26 +71,33 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
     if (!email || !password) {
       return res.json({ success: false, message: "Please fill all fields" });
     }
+
     const user = await User.findOne({ email });
     if (!user) {
-      return res.json({ success: false, message: "Invalid credentials" });
+      return res.json({ success: false, message: "User does not exist" });
     }
+
     const isPasswordValid = await bcrypt.compare(password, user.password);
+
     if (!isPasswordValid) {
       return res.json({ success: false, message: "Invalid credentials" });
     }
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
+
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", //use secure cookies in production
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict", //CSRF production
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
+
     return res.json({
       success: true,
       message: "User logged in successfully",
@@ -77,7 +111,7 @@ export const login = async (req, res) => {
 
 export const isAuth = async (req, res) => {
   try {
-    const  {userId}  = req;
+    const { userId } = req;
     const user = await User.findById(userId).select("-password");
     return res.json({
       success: true,

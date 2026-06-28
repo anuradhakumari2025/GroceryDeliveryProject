@@ -54,3 +54,5 @@ test.describe("Authentication Testing Suite", () => {
     await expect(page.getByText('Hi! Seller')).toBeVisible();
   });
 });
+
+// npx playwright test -g "@seller-login" --headed
