@@ -40,7 +40,7 @@ jobs:
       - name: Create Test Credentials JSON File
         run: |
           mkdir -p data
-          echo '${{ secrets.TEST_CREDENTIALS_JSON }}' > data/credentials.env.json
+          echo '${{ secrets.TEST_CREDENTIALS_JSON }}' > tests/data/credentials.env.json
         working-directory: e2e-tests
 
       - name: Run Playwright Tests
