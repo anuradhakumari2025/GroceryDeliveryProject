@@ -13,7 +13,9 @@ test.describe("Authentication Testing Suite", () => {
       const registerPage = new RegisterPage(page);
       await registerPage.navigate(baseUrl);
 
-      await registerPage.registerUser(user.name, user.email, user.password);
+      const uniqueEmail = user.email.replace("@", `_${Date.now()}@`);
+
+      await registerPage.registerUser(user.name, uniqueEmail, user.password);
 
       // Assert redirection or success state
       await expect(page).toHaveURL(baseUrl);
@@ -51,7 +53,7 @@ test.describe("Authentication Testing Suite", () => {
 
     // Assert user lands on the seller specific dashboard
     await expect(page).toHaveURL(`${baseUrl}/seller`);
-    await expect(page.getByText('Hi! Seller')).toBeVisible();
+    await expect(page.getByText("Hi! Seller")).toBeVisible();
   });
 });
 

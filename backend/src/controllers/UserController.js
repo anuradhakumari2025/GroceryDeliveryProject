@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import jwt from "jsonwebtoken";
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -10,12 +12,10 @@ export const register = async (req, res) => {
       return res.json({ success: false, message: "Email is required" });
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return res.json({
         success: false,
-        message:
-          "Invalid email format",
+        message: "Invalid email format",
       });
     }
 
@@ -72,11 +72,23 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res.json({ success: false, message: "Please fill all fields" });
+    if (!email) {
+      return res.json({ success: false, message: "Email is required" });
+    }
+
+    if (!emailRegex.test(email)) {
+      return res.json({
+        success: false,
+        message: "Invalid email format",
+      });
+    }
+
+    if (!password) {
+      return res.json({ success: false, message: "Password is required" });
     }
 
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.json({ success: false, message: "User does not exist" });
     }
@@ -105,7 +117,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 

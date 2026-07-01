@@ -51,25 +51,21 @@ const Login = () => {
             type="email"
             placeholder="type here"
             className="border border-primary rounded w-full p-2 mt-1 outline-primary"
-            required
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
 
         <div className="w-full">
           <p>Password</p>
-          {/* UPDATED: Added relative wrapper wrapper container for positioning the absolute icon eye */}
           <div className="relative w-full">
             <input
               name="password"
-              // UPDATED: Condition dynamically changes input type
               type={showPassword ? "text" : "password"}
               placeholder="type here"
               className="border border-primary rounded w-full p-2 pr-10 mt-1 outline-primary"
-              required
               onChange={(e) => setPassword(e.target.value)}
             />
-            {/* UPDATED: Interactive visibility toggle icon container */}
+
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
@@ -80,7 +76,6 @@ const Login = () => {
           </div>
         </div>
 
-        {/* UPDATED: Navigates using React Router wrapper paths instead of toggle internal state */}
         <p>
           Create an account?{" "}
           <span
