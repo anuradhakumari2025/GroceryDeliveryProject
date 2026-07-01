@@ -48,7 +48,7 @@ export default defineConfig({
     {
       // command: "node server.js",
       //  Injects NODE_ENV=test into your backend process automatically!
-      command: "cross-env NODE_ENV=test node server.js",
+      command: "npx cross-env NODE_ENV=test node server.js",
       cwd: "../backend",
       url: "http://localhost:4000",
       reuseExistingServer: !process.env.CI,
