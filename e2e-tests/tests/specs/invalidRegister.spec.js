@@ -1,7 +1,7 @@
 const { test, expect } = require("@playwright/test");
 const { RegisterPage } = require("../pages/RegisterPage"); 
 const testData = require("../data/credentials.env.json");
-const { MongoClient } = require('mongodb');
+// const { MongoClient } = require('mongodb');
 
 test.describe("Authentication - Negative Registration Testing Suite", () => {
   const baseUrl = testData.baseUrl;
