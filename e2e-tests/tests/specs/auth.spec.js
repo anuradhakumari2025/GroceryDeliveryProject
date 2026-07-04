@@ -30,10 +30,14 @@ test.describe("Authentication Testing Suite", () => {
 
   test("Should @login existing user credentials", async ({ page }) => {
     const loginPage = new LoginPage(page);
+    console.log(baseUrl, "line 33");
     await loginPage.navigate(baseUrl);
+    console.log("email", testData.user.email);
+    console.log("password", testData.user.password);
     await loginPage.login(testData.user.email, testData.user.password);
 
     // Validate dashboard state
+    console.log(baseUrl);
     await expect(page).toHaveURL(baseUrl);
 
     const toastMessage = await page.getByText("User logged in successfully");

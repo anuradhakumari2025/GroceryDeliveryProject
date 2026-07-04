@@ -18,7 +18,6 @@ test.describe("Authentication - Negative Registration Testing Suite", () => {
       await registerPage.navigate(baseUrl);
 
       // 1. Fill out form using your existing Register Page Object Model method
-      // (Ensure your registerUser method accepts these parameters in this order)
       await registerPage.registerUser(
         user.name,
         user.email,
