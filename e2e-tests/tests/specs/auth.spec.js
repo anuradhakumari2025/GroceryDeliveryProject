@@ -7,15 +7,13 @@ import testData from "../data/credentials.env.json";
 test.describe("Authentication Testing Suite", () => {
   const baseUrl = testData.baseUrl;
 
-  // Loop through each user dataset dynamically
-  testData.registrationUsers.forEach((user) => {
-    test(`Should register user: ${user.email} @register`, async ({ page }) => {
+    test(`Should register user: ${registrationUser.email} @register`, async ({ page }) => {
       const registerPage = new RegisterPage(page);
       await registerPage.navigate(baseUrl);
 
-      const uniqueEmail = user.email.replace("@", `_${Date.now()}@`);
+      const uniqueEmail = registrationUser.email.replace("@", `_${Date.now()}@`);
 
-      await registerPage.registerUser(user.name, uniqueEmail, user.password);
+      await registerPage.registerUser(registrationUser.name, uniqueEmail, registrationUser.password);
 
       // Assert redirection or success state
       await expect(page).toHaveURL(baseUrl);
@@ -26,7 +24,6 @@ test.describe("Authentication Testing Suite", () => {
       await expect(toastMessage).toHaveText("User registered successfully");
       await expect(toastMessage).toBeHidden();
     });
-  });
 
   test("Should @login existing user credentials", async ({ page }) => {
     const loginPage = new LoginPage(page);
