@@ -7,23 +7,32 @@ import testData from "../data/credentials.env.json";
 test.describe("Authentication Testing Suite", () => {
   const baseUrl = testData.baseUrl;
 
-    test(`Should register user: ${registrationUser.email} @register`, async ({ page }) => {
-      const registerPage = new RegisterPage(page);
-      await registerPage.navigate(baseUrl);
+  test(`Should register user: ${testData.registerUser.email} @register`, async ({
+    page,
+  }) => {
+    const registerPage = new RegisterPage(page);
+    await registerPage.navigate(baseUrl);
 
-      const uniqueEmail = registrationUser.email.replace("@", `_${Date.now()}@`);
+    const uniqueEmail = testData.registerUser.email.replace(
+      "@",
+      `_${Date.now()}@`,
+    );
 
-      await registerPage.registerUser(registrationUser.name, uniqueEmail, registrationUser.password);
+    await registerPage.registerUser(
+      testData.registerUser.name,
+      uniqueEmail,
+      testData.registerUser.password,
+    );
 
-      // Assert redirection or success state
-      await expect(page).toHaveURL(baseUrl);
+    // Assert redirection or success state
+    await expect(page).toHaveURL(baseUrl);
 
-      const toastMessage = await page.getByText("User registered successfully");
+    const toastMessage = await page.getByText("User registered successfully");
 
-      await expect(toastMessage).toBeVisible();
-      await expect(toastMessage).toHaveText("User registered successfully");
-      await expect(toastMessage).toBeHidden();
-    });
+    await expect(toastMessage).toBeVisible();
+    await expect(toastMessage).toHaveText("User registered successfully");
+    await expect(toastMessage).toBeHidden();
+  });
 
   test("Should @login existing user credentials", async ({ page }) => {
     const loginPage = new LoginPage(page);
