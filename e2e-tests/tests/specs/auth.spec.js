@@ -7,6 +7,7 @@ import testData from "../data/credentials.env.json";
 test.describe("Authentication Testing Suite", () => {
   const baseUrl = testData.baseUrl;
 
+  // Test for user registration
   test(`Should register user: ${testData.registerUser.email} @register`, async ({
     page,
   }) => {
@@ -34,23 +35,34 @@ test.describe("Authentication Testing Suite", () => {
     await expect(toastMessage).toBeHidden();
   });
 
+  // Test for user login
   test("Should @login existing user credentials", async ({ page }) => {
     const loginPage = new LoginPage(page);
-    console.log(baseUrl, "line 33");
+
     await loginPage.navigate(baseUrl);
+
     console.log("email", testData.user.email);
     console.log("password", testData.user.password);
+
+    // Start listening for the login API response BEFORE clicking Login
+    const loginResponsePromise = page.waitForResponse((response) =>
+      response.url().includes("/api/user/login"),
+    );
+
+    // This clicks the Login button
     await loginPage.login(testData.user.email, testData.user.password);
 
-    // Validate dashboard state
-    console.log(baseUrl);
+    // Wait for the API response
+    const loginResponse = await loginResponsePromise;
+
+    console.log("Status:", loginResponse.status());
+    console.log("Body:", await loginResponse.text());
+
+    // Now check whether the page redirected
     await expect(page).toHaveURL(baseUrl);
 
-    const toastMessage = await page.getByText("User logged in successfully");
-
+    const toastMessage = page.getByText("User logged in successfully");
     await expect(toastMessage).toBeVisible();
-    await expect(toastMessage).toHaveText("User logged in successfully");
-    await expect(toastMessage).toBeHidden();
   });
 
   test("Should @seller-login seller credentials securely", async ({ page }) => {

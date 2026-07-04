@@ -117,7 +117,11 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    return res.json({ success: false, message: error.message });
+    // return res.json({ success: false, message: error.message });
+    return res.json({
+      success: false,
+      message: "Invalid credentials",
+    });
   }
 };
 
