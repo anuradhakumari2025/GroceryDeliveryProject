@@ -1,0 +1,24 @@
+{
+  "fruits": {
+    "name": "Apple",
+    "price": 120,
+    "offerPrice": 100,
+    "category": "Fruits"
+  },
+
+  "vegetables": {
+    "name": "Tomato",
+    "price": 40,
+    "offerPrice": 35,
+    "category": "Vegetables"
+  },
+
+  "newProduct": {
+    "name": "Fresh Organic Guava",
+    "price": 130,
+    "offerPrice": 120,
+    "description": "Fresh organic guavas sourced locally.",
+    "category": "Fruits",
+    "image": "../assets/lotus.jfif"
+  }
+}

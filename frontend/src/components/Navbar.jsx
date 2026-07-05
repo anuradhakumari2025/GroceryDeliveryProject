@@ -34,8 +34,6 @@ const Navbar = () => {
     }
   };
 
-  // UPDATED: Removed the automatic useEffect redirect loop to prevent UX disruption while typing.
-  // Instead, added this explicit search keydown handler for a better user experience.
   const handleSearchSubmit = (e) => {
     if (e.key === "Enter" && searchQuery.trim().length > 0) {
       navigate("/products");

@@ -3,17 +3,8 @@ import { v2 as cloudinary } from "cloudinary";
 
 export const addProduct = async (req, res) => {
   try {
+    // console.log("Request Body:", req.body);
     let productData = JSON.parse(req.body.productData);
-
-    // const images = req.files;
-    // let imagesUrl = await Promise.all(
-    //   images.map(async (item) => {
-    //     let result = await cloudinary.uploader.upload(item.path, {
-    //       resource_type: "image",
-    //     });
-    //     return result.secure_url;
-    //   }),
-    // );
 
     const images = req.files || [];
     let imagesUrl = [];
@@ -37,14 +28,25 @@ export const addProduct = async (req, res) => {
       // LIVE DEVELOPMENT/PRODUCTION: Real network upload to Cloudinary
       imagesUrl = await Promise.all(
         images.map(async (item) => {
-          let result = await cloudinary.uploader.upload(item.path, {
-            resource_type: "image",
-          });
-          return result.secure_url;
+          try {
+            const result = await cloudinary.uploader.upload(item.path, {
+              resource_type: "image",
+            });
+            return result.secure_url;
+          } catch (err) {
+            console.log("message:", err.message);
+            console.log("http_code:", err.http_code);
+            console.log("name:", err.name);
+
+            if (err.response) {
+              console.log(err.response);
+            }
+
+            throw err;
+          }
         }),
       );
     }
-
     await Product.create({
       ...productData,
       image: imagesUrl,

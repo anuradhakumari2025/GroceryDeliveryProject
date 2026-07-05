@@ -34,12 +34,17 @@ export default defineConfig({
       name: "setup",
       testMatch: /.*\.setup\.js/,
     },
+
+    // Actual browser tests
     {
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
         viewport: { width: 1366, height: 768 },
       },
+
+      // Run setup project first
+      dependencies: ["setup"],
     },
   ],
 

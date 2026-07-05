@@ -11,12 +11,13 @@ const AddProduct = () => {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [offerPrice, setOfferPrice] = useState("");
-  const [loading, setLoading] = useState(false); // 👈 Loader state
+  const [loading, setLoading] = useState(false); 
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      setLoading(true); // 👈 Start loader
+      setLoading(true); 
+
       const productData = {
         name,
         description: description.split("\n"),
@@ -24,13 +25,16 @@ const AddProduct = () => {
         price,
         offerPrice,
       };
-      // console.log(productData)
+      // console.log("Product Data: from frontend", productData);
       const formData = new FormData();
       formData.append("productData", JSON.stringify(productData));
 
-      for (let i = 0; i < files.length; i++) {
-        formData.append("images", files[i]);
+      for(let file of files) {
+        if(file && file != 'undefined') {
+          formData.append("images", file);
+        }
       }
+
 
       const { data } = await axios.post("/product/add", formData);
 
@@ -49,7 +53,7 @@ const AddProduct = () => {
       console.log(error);
       toast.error(error.message);
     } finally {
-      setLoading(false); // 👈 Stop loader
+      setLoading(false);
     }
   };
 
@@ -133,9 +137,13 @@ const AddProduct = () => {
           <select
             id="product-category"
             value={category}
+            required
             onChange={(e) => setCategory(e.target.value)}
             className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
           >
+             <option value="" disabled>
+                Select a category
+              </option>
             {categories.map((item, idx) => (
               <option key={idx} value={item.path}>
                 {item.path}{" "}
