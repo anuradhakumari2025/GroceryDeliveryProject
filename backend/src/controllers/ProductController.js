@@ -6,6 +6,41 @@ export const addProduct = async (req, res) => {
     // console.log("Request Body:", req.body);
     let productData = JSON.parse(req.body.productData);
 
+    const { name, description, category, price, offerPrice } = productData;
+
+    if (!name) {
+      return res.json({ success: false, message: "Product name is required" });
+    }
+
+    if (
+      !description ||
+      !Array.isArray(description) ||
+      description.length === 0 ||
+      description[0].trim() === ""
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Product description is required" });
+    }
+
+    if (!category || category.trim() === "") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Product category is required" });
+    }
+
+    if (!price || price.toString().trim() === "") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Product price is required" });
+    }
+
+    if (!offerPrice || offerPrice.toString().trim() === "") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Product offer price is required" });
+    }
+
     const images = req.files || [];
     let imagesUrl = [];
 

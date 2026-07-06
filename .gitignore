@@ -26,10 +26,9 @@ lerna-debug.log*
 **/.env
 **/.env.*
 **/tests/data/credentials.env.json
+**/tests/data/products.env.json
 
 **/src/components/Test.jsx
-**/tests/specs/addProduct.spec.js
-**/tests/specs/seller.setup.js
 
 # Playwright Test Artifacts (Matches any folder)
 **/test-results/

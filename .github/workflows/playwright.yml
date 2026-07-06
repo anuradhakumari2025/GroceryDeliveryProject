@@ -41,6 +41,7 @@ jobs:
         run: |
           mkdir -p tests/data
           echo '${{ secrets.TEST_CREDENTIALS_JSON }}' > tests/data/credentials.env.json
+          echo '${{secrets.PRODUCTS_JSON}}' > tests/data/products.env.json
         working-directory: e2e-tests
 
       - name: Run Playwright Tests
