@@ -39,13 +39,16 @@ export const AppContextProvider = ({ children }) => {
     try {
       const { data } = await axios.get("/product/list");
       if (data.success) {
+        // console.log("Products fetched successfully",data.products);
         setProducts(data.products);
       } else {
         toast.error(data.message);
+        return;
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+      return;
     }
   };
 
@@ -56,12 +59,12 @@ export const AppContextProvider = ({ children }) => {
         setUser(data.user);
         setCartItems(data.user.cartItems);
       } else {
-        setUser(null);
+        return setUser(null);
       }
     } catch (error) {
       setUser(null);
       console.log(error);
-      toast.error(error.message);
+      return toast.error(error.message);
     }
   };
 
@@ -130,7 +133,7 @@ export const AppContextProvider = ({ children }) => {
         }
       } catch (error) {
         console.log(error);
-        toast.error(error.message);
+        return toast.error(error.message);
       }
     };
     if (user) {

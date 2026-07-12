@@ -11,12 +11,12 @@ const AddProduct = () => {
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [offerPrice, setOfferPrice] = useState("");
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
-      setLoading(true); 
+      setLoading(true);
 
       const productData = {
         name,
@@ -29,8 +29,8 @@ const AddProduct = () => {
       const formData = new FormData();
       formData.append("productData", JSON.stringify(productData));
 
-      for(let file of files) {
-        if(file && file != 'undefined') {
+      for (let file of files) {
+        if (file && file != "undefined") {
           formData.append("images", file);
         }
       }
@@ -79,7 +79,7 @@ const AddProduct = () => {
                     }}
                   />
                   <img
-                  name="product-image"
+                    name="product-image"
                     className="max-w-24 cursor-pointer"
                     src={
                       files[index]
@@ -137,9 +137,9 @@ const AddProduct = () => {
             onChange={(e) => setCategory(e.target.value)}
             className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
           >
-             <option value="" disabled>
-                Select a category
-              </option>
+            <option value="" disabled>
+              Select a category
+            </option>
             {categories.map((item, idx) => (
               <option key={idx} value={item.path}>
                 {item.path}{" "}
@@ -186,12 +186,6 @@ const AddProduct = () => {
         </div>
 
         {/* Submit Button */}
-        {/* <button
-          type="submit"
-          className="mt-4 bg-primary text-white px-8 font-medium py-2 rounded hover:bg-primary-dull"
-        >
-          ADD
-        </button> */}
         <button
           type="submit"
           disabled={loading}

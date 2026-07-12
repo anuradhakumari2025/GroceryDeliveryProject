@@ -41,8 +41,13 @@ jobs:
         run: |
           mkdir -p tests/data
           echo '${{ secrets.TEST_CREDENTIALS_JSON }}' > tests/data/credentials.env.json
-          echo '${{secrets.PRODUCTS_JSON}}' > tests/data/products.env.json
         working-directory: e2e-tests
+
+      - name: Seed Test Database
+        run: npm run seed-test
+        working-directory: backend
+        env:
+            MONGODB_URI: ${{ secrets.MONGODB_URI }}
 
       - name: Run Playwright Tests
         env:

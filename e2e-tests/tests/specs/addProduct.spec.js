@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import testData from "../data/credentials.env.json";
-import productData from "../data/products.env.json";
+import productData from "../data/products.json";
 import path from "path";
 
 // Test file to use the logged-in seller cookies

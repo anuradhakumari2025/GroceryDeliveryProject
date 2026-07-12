@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { assets, dummyOrders } from "../../assets/greencart_assets/assets";
+import { assets } from "../../assets/greencart_assets/assets";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 
@@ -23,6 +23,7 @@ const Orders = () => {
   useEffect(() => {
     fetchOrders();
   }, []);
+  
   return (
     <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll">
       <div className="md:p-10 p-4 space-y-4">

@@ -1,35 +1,32 @@
 import React, { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
-import { Eye, EyeOff } from "lucide-react"; 
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const { setUser, axios, navigate } = useAppContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // UPDATED: Added state to toggle password visibility
   const [showPassword, setShowPassword] = useState(false);
 
   const submitHandler = async (e) => {
     try {
       e.preventDefault();
-      // UPDATED: Changed the endpoint strictly to '/user/login'
       const { data } = await axios.post("/user/login", {
         email,
         password,
       });
       if (data.success) {
-        // UPDATED: Added destination route target back into navigate
         navigate("/");
         setUser(data.user);
         toast.success(data.message);
       } else {
-        toast.error(data.message);
+        return toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      return toast.error(error.message);
     }
   };
 

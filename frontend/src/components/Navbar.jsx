@@ -40,7 +40,6 @@ const Navbar = () => {
     }
   };
 
-  // UPDATED: Created a centralized login handler to sync navigation, modal visibility, and mobile menu state.
   const handleLoginClick = () => {
     navigate("/login");
     setShowUserLogin(true);
@@ -58,8 +57,9 @@ const Navbar = () => {
         <NavLink to="/">Home</NavLink>
         <NavLink to="/products">All Products</NavLink>
         <NavLink to="/">Contact</NavLink>
+
+        {/* Search Bar */}
         <div className="hidden lg:flex items-center text-sm gap-2 border border-gray-300 px-3 rounded-full">
-          {/* UPDATED: Added value binding and onKeyDown listener for structured search submission */}
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -77,11 +77,12 @@ const Navbar = () => {
             className="h-4 w-4 cursor-pointer"
           />
         </div>
+
         <div
           onClick={() => navigate("/cart")}
           className="cursor-pointer relative"
         >
-          <img className="w-6 opacity-80" src={assets.nav_cart_icon} alt="" />
+          <img className="w-6 opacity-80" src={assets.nav_cart_icon} alt="cart" />
           <button className=" absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full ">
             {getCartCount()}
           </button>
@@ -107,7 +108,6 @@ const Navbar = () => {
             </ul>
           </div>
         ) : (
-          /* UPDATED: Tied the desktop login button to the centralized handler for instant navigation */
           <button
             onClick={handleLoginClick}
             className="px-8 py-2 bg-primary hover:bg-primary-dull transition text-white rounded-full cursor-pointer"
@@ -138,7 +138,6 @@ const Navbar = () => {
       </div>
 
       {open && (
-        /* UPDATED: Changed the breakpoint wrapper utility from md:hidden to sm:hidden to eliminate layout overlapping */
         <div
           className={`${
             open ? "flex" : "hidden"

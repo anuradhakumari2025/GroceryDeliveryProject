@@ -44,18 +44,23 @@ const Cart = () => {
         }
       } else {
         toast.error(data.message);
+        console.log("message", data.message);
+        return;
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message);
+      return;
     }
   };
 
   const placeOrder = async () => {
     try {
       if (!selectedAddress) {
+        console.log("No address selected");
         return toast.error("Please select address");
       }
+
       if (paymentOption === "COD") {
         const { data } = await axios.post("/order/cod", {
           items: cartArray.map((item) => ({
@@ -64,15 +69,19 @@ const Cart = () => {
           })),
           address: selectedAddress._id,
         });
+
         if (data.success) {
           toast.success(data.message);
           setCartItems({});
           navigate("/my-orders");
         } else {
+          console.log("message", data.message);
           toast.error(data.message);
+          return;
         }
       } else {
         //payment using razorpay
+        console.log("==== placeOrderRazorpay HIT ====");
         const { data } = await axios.post("/order/razorpay", {
           items: cartArray.map((item) => ({
             product: item._id,
@@ -81,10 +90,12 @@ const Cart = () => {
           address: selectedAddress._id,
         });
 
-        // console.log("Razorpay Order Response:", data); // Debugging
+        console.log("Razorpay Order Response:", data); // Debugging
 
         if (!data.success) {
+          console.log("message", data.message);
           toast.error(data.message);
+          return;
         }
 
         const options = {
@@ -103,7 +114,12 @@ const Cart = () => {
               razorpay_signature,
             } = response;
 
-            if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+            if (
+              !razorpay_order_id ||
+              !razorpay_payment_id ||
+              !razorpay_signature
+            ) {
+              console.error("Missing Razorpay response fields:", response);
               return toast.error("Payment failed. Please try again.");
             }
 
@@ -114,14 +130,19 @@ const Cart = () => {
               razorpay_signature,
             });
 
-            console.log(verifyResponse)
+            console.log(verifyResponse);
 
             if (verifyResponse.data.success) {
               toast.success("Payment successful!");
               setCartItems({});
               navigate("/my-orders");
             } else {
+              console.error(
+                "Payment verification failed:",
+                verifyResponse.data,
+              );
               toast.error("Payment verification failed");
+              return;
             }
           },
           prefill: {
@@ -134,14 +155,17 @@ const Cart = () => {
           },
         };
 
-        // console.log("Razorpay Options from frontend:", options);
+        
+
+        console.log("Razorpay Options from frontend:", options);
 
         const razorpay = new window.Razorpay(options);
         razorpay.open();
       }
     } catch (error) {
-      console.log(error)
-      toast.error(error.message)
+      console.log(error);
+      toast.error(error.message);
+      return;
     }
   };
 
@@ -164,6 +188,7 @@ const Cart = () => {
       toast.error(error.message);
     }
   };
+
   useEffect(() => {
     if (user) {
       fetchCartItems();
@@ -193,20 +218,22 @@ const Cart = () => {
               <div
                 onClick={() => {
                   navigate(
-                    `/products/${product.category.toLowerCase()}/${product._id}`
+                    `/products/${product.category.toLowerCase()}/${product._id}`,
                   );
                   scrollTo(0, 0);
                 }}
                 className="cursor-pointer w-24 h-24 flex items-center justify-center border border-primary rounded"
               >
-                <img src={product.image[0]} alt={product.name} />
+                <img src={product.image[0]} alt={product?.name || "Product Image"} />
               </div>
+
               <div>
                 <p className="hidden md:block font-semibold">{product.name} </p>
                 <div className="font-normal text-gray-500/70">
                   <p>
                     Weight: <span>{product.weight || "N/A"} </span>
                   </p>
+
                   <div className="flex items-center">
                     <p>Qty:</p>
                     <select
@@ -219,7 +246,7 @@ const Cart = () => {
                       className="pl-2 outline-none"
                     >
                       {Array(
-                        cartArray[product._id] > 9 ? cartArray[product._id] : 9
+                        cartArray[product._id] > 9 ? cartArray[product._id] : 9,
                       )
                         .fill("")
                         .map((_, idx) => (
@@ -232,6 +259,7 @@ const Cart = () => {
                 </div>
               </div>
             </div>
+            
             <p className="text-center">
               {currency}
               {product.offerPrice * product.quantity}
@@ -280,6 +308,7 @@ const Cart = () => {
             <button
               onClick={() => setShowAddress(!showAddress)}
               className="text-primary hover:underline cursor-pointer"
+              name="change-address"
             >
               Change
             </button>

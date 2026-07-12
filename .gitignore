@@ -24,9 +24,8 @@ lerna-debug.log*
 
 # CRITICAL: Ignore all environment secret files anywhere in the project
 **/.env
-**/.env.*
+# **/.env.*
 **/tests/data/credentials.env.json
-**/tests/data/products.env.json
 
 **/src/components/Test.jsx
 

@@ -10,6 +10,7 @@ setup("Authenticate @seller-session", async ({ page }) => {
   const sellerLoginPage = new SellerLoginPage(page);
   
   await sellerLoginPage.navigate(baseUrl);
+  
   await sellerLoginPage.login(
     testData.seller.email,
     testData.seller.password

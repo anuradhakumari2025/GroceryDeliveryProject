@@ -28,6 +28,7 @@ const ProductDetails = () => {
   return (
     product && (
       <div className="max-w-6xl w-full px-6 mt-12">
+
         <p className="pb-4 text-xl">
           <Link to={"/"}>Home</Link>/<Link to={"/products"}>Products</Link>/
           <Link to={`/products/${product.category.toLowerCase()}`}>
@@ -35,8 +36,11 @@ const ProductDetails = () => {
           </Link>
           /<span className="text-primary">{product.name} </span>
         </p>
+
         <div className="flex flex-col md:flex-row gap-16 mt-4">
           <div className="flex gap-3">
+
+            {/* Thumbnail Images */}
             <div className="flex flex-col gap-3">
               {product.image.map((img, idx) => (
                 <div
@@ -48,11 +52,17 @@ const ProductDetails = () => {
                 </div>
               ))}
             </div>
+
+            {/* Main Product Image */}
             <div className="border border-primary/30 max-w-100 rounded overflow-hidden">
               <img src={thumbnail} alt="Selected Product" />
             </div>
           </div>
+
+
           <div className="text-sm w-full md:w-1/2">
+
+          {/* Product Information */}
             <h1 className="text-3xl font-medium">{product.name} </h1>
             <div className="flex items-center gap-0.5 mt-1">
               {Array(5)
@@ -83,6 +93,8 @@ const ProductDetails = () => {
                 <li key={idx}>{desc} </li>
               ))}
             </ul>
+
+            {/* Action Buttons */}
             <div className="flex items-center mt-10 gap-4 text-base">
               <button
                 onClick={() => addToCart(product._id)}
