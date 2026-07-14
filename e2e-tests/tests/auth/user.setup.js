@@ -9,10 +9,10 @@ setup("Authenticate @user-session", async ({ page }) => {
 
   await loginPage.navigate(testData.baseUrl);
 
-  await loginPage.login(
-    testData.user.email,
-    testData.user.password
-  );
+  console.log("email", testData.user.email);
+  console.log("password", testData.user.password);
+
+  await loginPage.login(testData.user.email, testData.user.password);
 
   // Wait until login completes
   await expect(page).toHaveURL(testData.baseUrl);
@@ -23,7 +23,7 @@ setup("Authenticate @user-session", async ({ page }) => {
 });
 
 //   // "user": {
-  //   "name": "Vasim",
-  //   "email": "vasim_1783100939695@gmail.com",
-  //   "password": "vasim"
-  // },
+//   "name": "Vasim",
+//   "email": "vasim_1783100939695@gmail.com",
+//   "password": "vasim"
+// },
