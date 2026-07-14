@@ -181,6 +181,7 @@ export const AppContextProvider = ({ children }) => {
     axios,
     fetchProducts,
   };
+  
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
