@@ -32,5 +32,7 @@ export class CartPage {
     await this.cartButton.click();
   }
 
-  async verifyProductInCart(productName) {}
+  async verifyProductInCart(productName) {
+    await this.page.getByText(productName, { exact: true });
+  }
 }

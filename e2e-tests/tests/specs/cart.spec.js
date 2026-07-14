@@ -1,4 +1,3 @@
-// cart.spec.js
 import { test, expect } from "@playwright/test";
 import { CartPage } from "../pages/CartPage";
 import testData from "../data/credentials.env.json";
@@ -6,16 +5,17 @@ import productData from "../data/products.json";
 
 const { baseUrl } = testData;
 
+test.use({ storageState: "playwright/.auth/user.json" });
+
 test("Click on a dynamic database product and navigate to @cart page", async ({
   page,
 }) => {
   const cartPage = new CartPage(page);
 
   // Navigate to your store page
-  console.log(baseUrl)
   await page.goto(`${baseUrl}`);
 
-  await page.waitForTimeout(5000);
+  await page.waitForTimeout(2000);
 
   // Pass the dynamic alt text to the click action
   await cartPage.clickProductImage(productData.fruits.name);
@@ -39,5 +39,5 @@ test("Click on a dynamic database product and navigate to @cart page", async ({
   await cartPage.openCart(baseUrl);
   await expect(page).toHaveURL(`${baseUrl}/cart`);
 
-  // await cartPage.verifyProductInCart("Apple");
+  await cartPage.verifyProductInCart(productData.fruits.name);
 });

@@ -117,7 +117,6 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    // return res.json({ success: false, message: error.message });
     return res.json({
       success: false,
       message: "Invalid credentials",
@@ -129,13 +128,14 @@ export const isAuth = async (req, res) => {
   try {
     const { userId } = req;
     const user = await User.findById(userId).select("-password");
+
     return res.json({
       success: true,
       user,
     });
   } catch (error) {
     console.error(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 

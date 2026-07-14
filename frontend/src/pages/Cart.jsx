@@ -179,13 +179,14 @@ const Cart = () => {
     try {
       const { data } = await axios.get("/cart/get");
       if (data.success) {
+        console.log(data.cartItems)
         setCartItems(data.cartItems); // Update cartItems in context
       } else {
-        toast.error(data.message);
+      return  toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+     return toast.error(error.message);
     }
   };
 

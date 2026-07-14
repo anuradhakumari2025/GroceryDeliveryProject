@@ -5,17 +5,18 @@ import { assets } from "../assets/greencart_assets/assets";
 import ProductCard from "../components/ProductCard";
 
 const ProductDetails = () => {
-  const { products, navigate, currency, addToCart,user } = useAppContext();
+  const { products, navigate, currency, addToCart, user } = useAppContext();
   const { id } = useParams();
   const product = products.find((item) => item._id === id);
 
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [thumbnail, setThumbnail] = useState(null);
+  
   useEffect(() => {
     if (products.length > 0) {
       let productsCopy = products.slice();
       productsCopy = productsCopy.filter(
-        (item) => product.category === item.category
+        (item) => product.category === item.category,
       );
       setRelatedProducts(productsCopy.slice(0, 5));
     }
@@ -28,7 +29,6 @@ const ProductDetails = () => {
   return (
     product && (
       <div className="max-w-6xl w-full px-6 mt-12">
-
         <p className="pb-4 text-xl">
           <Link to={"/"}>Home</Link>/<Link to={"/products"}>Products</Link>/
           <Link to={`/products/${product.category.toLowerCase()}`}>
@@ -39,7 +39,6 @@ const ProductDetails = () => {
 
         <div className="flex flex-col md:flex-row gap-16 mt-4">
           <div className="flex gap-3">
-
             {/* Thumbnail Images */}
             <div className="flex flex-col gap-3">
               {product.image.map((img, idx) => (
@@ -59,10 +58,8 @@ const ProductDetails = () => {
             </div>
           </div>
 
-
           <div className="text-sm w-full md:w-1/2">
-
-          {/* Product Information */}
+            {/* Product Information */}
             <h1 className="text-3xl font-medium">{product.name} </h1>
             <div className="flex items-center gap-0.5 mt-1">
               {Array(5)
@@ -104,8 +101,8 @@ const ProductDetails = () => {
               </button>
               <button
                 onClick={() => {
-                 addToCart(product._id);
-                  user ? navigate("/cart"): navigate("/login");
+                  addToCart(product._id);
+                  user ? navigate("/cart") : navigate("/login");
                 }}
                 className="w-full py-3.5 cursor-pointer font-medium bg-primary text-white hover:bg-primary-dull transition"
               >
@@ -115,7 +112,6 @@ const ProductDetails = () => {
           </div>
         </div>
 
-        
         {/* Related Products */}
         <div className="flex flex-col items-center mt-20 ">
           <div className="flex flex-col items-center w-max">
@@ -129,7 +125,15 @@ const ProductDetails = () => {
                 <ProductCard key={idx} product={item} />
               ))}
           </div>
-          <button onClick={()=>{navigate('/products');scrollTo(0,0)}} className="mx-auto mt-8 cursor-pointer px-12 py-2.5 border rounded text-primary hover:bg-primary-dull transition hover:text-white ">See More </button>
+          <button
+            onClick={() => {
+              navigate("/products");
+              scrollTo(0, 0);
+            }}
+            className="mx-auto mt-8 cursor-pointer px-12 py-2.5 border rounded text-primary hover:bg-primary-dull transition hover:text-white "
+          >
+            See More{" "}
+          </button>
         </div>
       </div>
     )

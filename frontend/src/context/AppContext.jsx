@@ -68,15 +68,33 @@ export const AppContextProvider = ({ children }) => {
     }
   };
 
-  const addToCart = (itemId) => {
+  const addToCart = async (itemId) => {
     let cartData = structuredClone(cartItems);
+
     if (cartData[itemId]) {
       cartData[itemId] += 1;
     } else {
       cartData[itemId] = 1;
     }
+
     setCartItems(cartData);
-    toast.success("Item added to cart");
+
+    try {
+      const response = await axios.post(
+        "/cart/update",
+        { cartItems: cartData }, 
+        { headers: { token: localStorage.getItem("token") } }, 
+      );
+
+      if (response.data.success) {
+        toast.success("Item added to cart");
+      } else {
+        toast.error(response.data.message || "Failed to update cart");
+      }
+    } catch (error) {
+      console.error("Backend sync failed:", error);
+      return toast.error("Network error while syncing cart");
+    }
   };
 
   const updateCart = (itemId, quantity) => {
