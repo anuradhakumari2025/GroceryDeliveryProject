@@ -4,6 +4,9 @@ import dotenv from "dotenv";
 import User from "../src/models/User.js";
 import Product from "../src/models/Product.js";
 
+import bcrypt from "bcrypt";
+import User from "../src/models/User.js";
+
 dotenv.config();
 
 const DB = `${process.env.MONGODB_URI}/grocery_TEST`;
@@ -16,11 +19,14 @@ await Product.deleteMany({});
 
 await User.deleteMany({});
 
-// await User.insertMany({
-//   name: "Test User",
-//   email: "testuser@gmail.com",
-//   password: "testuser",
-// });
+const hashedPassword = await bcrypt.hash("test", 10);
+
+await User.create({
+  name: "Test User",
+  email: "test@gmail.com",
+  password: hashedPassword,
+  cartItems: {},
+});
 
 await Product.insertMany([
   {

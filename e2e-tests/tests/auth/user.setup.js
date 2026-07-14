@@ -23,7 +23,7 @@ setup("Authenticate @user-session", async ({ page }) => {
 });
 
 //   // "user": {
-//   "name": "Vasim",
-//   "email": "vasim_1783100939695@gmail.com",
-//   "password": "vasim"
+  // name: "Test User",
+  // email: "test@gmail.com",
+  // password: "test",
 // },
