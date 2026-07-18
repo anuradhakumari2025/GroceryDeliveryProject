@@ -21,9 +21,3 @@ setup("Authenticate @user-session", async ({ page }) => {
     path: authFile,
   });
 });
-
-//   // "user": {
-  // name: "Test User",
-  // email: "test@gmail.com",
-  // password: "test",
-// },

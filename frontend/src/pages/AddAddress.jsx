@@ -17,23 +17,7 @@ const InputField = ({ type, placeholder, name, handleChange, address }) => (
 );
 
 const AddAddress = () => {
-
-  const {axios,user,navigate} = useAppContext()
-  const onSubmitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const {data} = await axios.post('/address/add',{address})
-      if(data.success){
-        toast.success(data.message)
-        navigate('/cart')
-      }else{
-        toast.error(data.message)
-      }
-    } catch (error) {
-      console.log(error)
-      toast.error(error.message)
-    }
-  };
+  const { axios, user, navigate } = useAppContext();
 
   const [address, setAddress] = useState({
     firstName: "",
@@ -47,6 +31,22 @@ const AddAddress = () => {
     phone: "",
   });
 
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post("/address/add", { address });
+      if (data.success) {
+        toast.success(data.message);
+        navigate("/cart");
+      } else {
+        return toast.error(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      return toast.error(error.message);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setAddress((prevAddress) => ({
@@ -55,11 +55,11 @@ const AddAddress = () => {
     }));
   };
 
-  useEffect(()=>{
-    if(!user){
-      navigate('/cart')
+  useEffect(() => {
+    if (!user) {
+      navigate("/cart");
     }
-  },[])
+  }, []);
 
   return (
     <div className="my-16">

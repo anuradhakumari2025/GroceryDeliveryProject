@@ -14,15 +14,12 @@ test("Click on a dynamic database product and navigate to @cart page", async ({
   const cartPage = new CartPage(page);
 
   await page.goto(baseUrl);
-  // await page.waitForTimeout(2000);
 
   await addProductToCart(page,productData.fruits.name);
 
   await cartPage.clickCartButton();
-
   await cartPage.openCart(baseUrl);
 
   await expect(page).toHaveURL(`${baseUrl}/cart`);
-
   await cartPage.verifyProductInCart(productData.fruits.name);
 });

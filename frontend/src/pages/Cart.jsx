@@ -43,32 +43,32 @@ const Cart = () => {
           setSelectedAddress(data.addresses[0]);
         }
       } else {
-        toast.error(data.message);
         console.log("message", data.message);
-        return;
+        return toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
-      return;
+      return toast.error(error.message);
     }
   };
 
   const placeOrder = async () => {
     try {
-      if (!selectedAddress) {
-        console.log("No address selected");
+      const addresses = await getUserAddress();
+
+      if (addresses.length === 0) {
         return toast.error("Please select address");
       }
 
+      const addressId = addresses[0]._id;
+
       if (paymentOption === "COD") {
-        
         const { data } = await axios.post("/order/cod", {
           items: cartArray.map((item) => ({
             product: item._id,
             quantity: item.quantity,
           })),
-          address: selectedAddress._id,
+          address: addressId,
         });
 
         console.log("COD Order Response:", data); // Debugging
@@ -158,8 +158,6 @@ const Cart = () => {
           },
         };
 
-        
-
         console.log("Razorpay Options from frontend:", options);
 
         const razorpay = new window.Razorpay(options);
@@ -167,8 +165,7 @@ const Cart = () => {
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
-      return;
+      return toast.error(error.message);
     }
   };
 
@@ -183,13 +180,13 @@ const Cart = () => {
       const { data } = await axios.get("/cart/get");
       if (data.success) {
         // console.log(data.cartItems)
-        setCartItems(data.cartItems); 
+        setCartItems(data.cartItems);
       } else {
-      return  toast.error(data.message);
+        return toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
-     return toast.error(error.message);
+      return toast.error(error.message);
     }
   };
 
@@ -228,7 +225,10 @@ const Cart = () => {
                 }}
                 className="cursor-pointer w-24 h-24 flex items-center justify-center border border-primary rounded"
               >
-                <img src={product.image[0]} alt={product?.name || "Product Image"} />
+                <img
+                  src={product.image[0]}
+                  alt={product?.name || "Product Image"}
+                />
               </div>
 
               <div>
@@ -263,7 +263,7 @@ const Cart = () => {
                 </div>
               </div>
             </div>
-            
+
             <p className="text-center">
               {currency}
               {product.offerPrice * product.quantity}
