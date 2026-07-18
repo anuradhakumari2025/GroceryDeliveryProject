@@ -26,11 +26,11 @@ const Navbar = () => {
         setUser(null);
         navigate("/");
       } else {
-        toast.error(data.message);
+        return toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      return toast.error(error.message);
     }
   };
 
@@ -82,7 +82,11 @@ const Navbar = () => {
           onClick={() => navigate("/cart")}
           className="cursor-pointer relative"
         >
-          <img className="w-6 opacity-80" src={assets.nav_cart_icon} alt="cart" />
+          <img
+            className="w-6 opacity-80"
+            src={assets.nav_cart_icon}
+            alt="cart"
+          />
           <button className=" absolute -top-2 -right-3 text-xs text-white bg-primary w-[18px] h-[18px] rounded-full ">
             {getCartCount()}
           </button>

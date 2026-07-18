@@ -35,15 +35,13 @@ const Cart = () => {
   };
 
   const getUserAddress = async () => {
-    console.log("getUserAddress called");
-
     try {
       const { data } = await axios.get("/address/get");
       if (data.success) {
         setAddresses(data.addresses);
         if (data.addresses.length > 0) {
           setSelectedAddress(data.addresses[0]);
-          console.log("Setting selected address:", data.addresses[0]);
+          // console.log("Setting selected address:", data.addresses[0]);
         }
       } else {
         console.log("message", data.message);
@@ -72,7 +70,7 @@ const Cart = () => {
           address: addressId,
         });
 
-        console.log("COD Order Response:", data); // Debugging
+        // console.log("COD Order Response:", data); // Debugging
 
         if (data.success) {
           toast.success(data.message);

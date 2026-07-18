@@ -23,7 +23,9 @@ const address = {
 };
 
 test("Test @checkout Flow", async ({ page }) => {
-  page.on("console", async (msg) => {
+  
+  /*
+  page.on("console", async (msg) => {   
     console.log("================================");
     console.log("Browser Log Type:", msg.type());
     console.log("Browser Log:", msg.text());
@@ -44,6 +46,8 @@ test("Test @checkout Flow", async ({ page }) => {
   page.on("requestfailed", (request) => {
     console.log("REQUEST FAILED:", request.url(), request.failure()?.errorText);
   });
+  */
+  
 
   await page.goto(`${baseUrl}`);
 
@@ -67,21 +71,10 @@ test("Test @checkout Flow", async ({ page }) => {
   await page.waitForURL(`${baseUrl}/cart`);
   await page.waitForLoadState("networkidle");
 
-  page.on("request", (request) => {
-    console.log(request.method(), request.url());
-  });
-
   await expect(
     page.getByRole("button", { name: /Place Order|Proceed to Checkout/ }),
   ).toBeVisible();
   await checkoutPage.clickPlaceOrderButton();
-
-  console.log("Place order clicked: ", await page.url());
-  await page.screenshot({ path: "after-place-order.png", fullPage: true });
-
-  page.on("response", async (response) => {
-    console.log(response.status(), response.url());
-  });
 
   const toastMessage2 = page.getByText("Order placed successfully");
   await expect(toastMessage2).toBeVisible();
