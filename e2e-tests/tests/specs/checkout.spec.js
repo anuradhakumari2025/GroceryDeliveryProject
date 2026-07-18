@@ -11,6 +11,32 @@ test.use({
 const baseUrl = testData.baseUrl;
 
 test("Test @checkout Flow", async ({ page }) => {
+
+  page.on("request", request => {
+  if (request.url().includes("/order")) {
+    console.log(
+      "➡️ REQUEST:",
+      request.method(),
+      request.url(),
+      request.postData()
+    );
+  }
+});
+
+page.on("response", async response => {
+  if (response.url().includes("/order")) {
+    console.log(
+      "⬅️ RESPONSE:",
+      response.status(),
+      response.url()
+    );
+
+    try {
+      console.log(await response.text());
+    } catch {}
+  }
+});
+
   await page.goto(`${baseUrl}`);
 
   await addProductToCart(page, productData.fruits.name);
