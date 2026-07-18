@@ -35,12 +35,15 @@ const Cart = () => {
   };
 
   const getUserAddress = async () => {
+    console.log("getUserAddress called");
+
     try {
       const { data } = await axios.get("/address/get");
       if (data.success) {
         setAddresses(data.addresses);
         if (data.addresses.length > 0) {
           setSelectedAddress(data.addresses[0]);
+          console.log("Setting selected address:", data.addresses[0]);
         }
       } else {
         console.log("message", data.message);
@@ -54,13 +57,11 @@ const Cart = () => {
 
   const placeOrder = async () => {
     try {
-      const addresses = await getUserAddress();
-
-      if (addresses.length === 0) {
-        return toast.error("Please select address");
+      if (!selectedAddress) {
+        return toast.error("Please select an address");
       }
 
-      const addressId = addresses[0]._id;
+      const addressId = selectedAddress._id;
 
       if (paymentOption === "COD") {
         const { data } = await axios.post("/order/cod", {
@@ -97,8 +98,7 @@ const Cart = () => {
 
         if (!data.success) {
           console.log("message", data.message);
-          toast.error(data.message);
-          return;
+          return toast.error(data.message);
         }
 
         const options = {
@@ -323,6 +323,7 @@ const Cart = () => {
                   <p
                     key={idx}
                     onClick={() => {
+                      console.log("Clicked:", address);
                       setSelectedAddress(address);
                       setShowAddress(false);
                     }}

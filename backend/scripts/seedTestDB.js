@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "../src/models/User.js";
 import Product from "../src/models/Product.js";
+import Address from "../src/models/Address.js";
+import Order from "../src/models/Order.js";
 import bcrypt from "bcryptjs";
 
 dotenv.config();
@@ -13,7 +15,8 @@ await mongoose.connect(DB);
 console.log("Connected to test db");
 
 await Product.deleteMany({});
-
+await Address.deleteMany({});
+await Order.deleteMany({});
 await User.deleteMany({});
 
 const hashedPassword = await bcrypt.hash("test", 10);
@@ -34,13 +37,6 @@ await Product.insertMany([
     ],
     price: 120,
     offerPrice: 100,
-    category: "Fruits",
-  },
-  {
-    name: "Banana",
-    description: ["Sweet and ripe bananas", "Good source of potassium"],
-    price: 60,
-    offerPrice: 50,
     category: "Fruits",
   },
   {

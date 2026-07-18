@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const addAddressSchema = new mongoose.Schema({
   userId: {
     type: String,
@@ -42,5 +43,6 @@ const addAddressSchema = new mongoose.Schema({
     required: true,
   },
 });
+
 const Address = mongoose.model("Address", addAddressSchema);
 export default Address;
