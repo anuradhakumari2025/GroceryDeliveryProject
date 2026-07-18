@@ -12,8 +12,13 @@ const razorpayInstance = new Razorpay({
 
 export const placeOrderCOD = async (req, res) => {
   try {
+    console.log("==== PLACE ORDER HIT ====");
+
     const { items, address } = req.body;
     const userId = req.userId;
+
+    console.log(items);
+    console.log(address);
 
     if (!items || items.length === 0 || !address) {
       return res.json({
@@ -55,6 +60,10 @@ export const placeOrderCOD = async (req, res) => {
       status: "Placed",
     });
 
+    console.log("Order Created");
+const user = await User.findById(userId);
+
+    console.log(user.cartItems);
     await User.findByIdAndUpdate(userId, {
       cartItems: {},
     });

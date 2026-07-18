@@ -45,8 +45,10 @@ test("Test @checkout Flow", async ({ page }) => {
 
   await checkoutPage.clickPlaceOrderButton();
 
-  await page.waitForTimeout(2000); 
+  await page.waitForTimeout(2000);
 
   const toastMessage2 = page.getByText("Order placed successfully");
-  await expect(toastMessage2).toBeVisible();
+  await expect(toastMessage2).toBeVisible({
+    timeout: 5000,
+  });
 });
