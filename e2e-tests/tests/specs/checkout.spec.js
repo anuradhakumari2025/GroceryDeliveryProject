@@ -64,11 +64,16 @@ test("Test @checkout Flow", async ({ page }) => {
 
   const toastMessage1 = page.getByText("Address added successfully");
   await expect(toastMessage1).toBeVisible();
+  await page.waitForURL(`${baseUrl}/cart`);
+  await page.waitForLoadState("networkidle");
 
   page.on("request", (request) => {
     console.log(request.method(), request.url());
   });
 
+  await expect(
+    page.getByRole("button", { name: /Place Order|Proceed to Checkout/ }),
+  ).toBeVisible();
   await checkoutPage.clickPlaceOrderButton();
 
   console.log("Place order clicked: ", await page.url());

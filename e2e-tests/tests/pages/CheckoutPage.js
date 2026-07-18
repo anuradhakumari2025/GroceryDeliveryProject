@@ -15,7 +15,9 @@ export class CheckoutPage {
     this.countryInput = page.locator('input[name="country"]');
     this.phoneNumberInput = page.locator('input[name="phone"]');
     this.saveAddressButton = page.locator('button:has-text("Save Address")');
-    this.placeOrderButton = page.locator('button:has-text("Place Order")');
+    this.placeOrderButton = page.getByRole("button", {
+      name: /Place Order|Proceed to Checkout/,
+    });
   }
 
   async clickCartButton() {
