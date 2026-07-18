@@ -62,6 +62,7 @@ const Cart = () => {
       }
 
       if (paymentOption === "COD") {
+        
         const { data } = await axios.post("/order/cod", {
           items: cartArray.map((item) => ({
             product: item._id,
@@ -182,7 +183,7 @@ const Cart = () => {
       const { data } = await axios.get("/cart/get");
       if (data.success) {
         // console.log(data.cartItems)
-        setCartItems(data.cartItems); // Update cartItems in context
+        setCartItems(data.cartItems); 
       } else {
       return  toast.error(data.message);
       }
