@@ -2,6 +2,7 @@ import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import Razorpay from "razorpay";
 import crypto from "crypto";
+import User from "../models/User.js";
 
 // Initialize Razorpay instance
 const razorpayInstance = new Razorpay({
@@ -33,11 +34,11 @@ export const placeOrderCOD = async (req, res) => {
         });
       }
 
-      productData.push({
-        name: product.name,
-        quantity: item.quantity,
-        price: product.offerPrice,
-      });
+      // productData.push({
+      //   name: product.name,
+      //   quantity: item.quantity,
+      //   price: product.offerPrice,
+      // });
 
       amount += product.offerPrice * item.quantity;
     }
@@ -53,6 +54,11 @@ export const placeOrderCOD = async (req, res) => {
       paymentType: "COD",
       status: "Placed",
     });
+
+    await User.findByIdAndUpdate(userId, {
+      cartItems: {},
+    });
+
     return res.json({ success: true, message: "Order placed successfully" });
   } catch (error) {
     console.log(error);
@@ -136,10 +142,9 @@ export const placeOrderRazorpay = async (req, res) => {
       currency: razorpayOrder.currency,
       orderId: order._id,
     });
-
   } catch (error) {
     console.error("========== Razorpay Error ==========");
-       console.log(error);
+    console.log(error);
 
     console.log("Status:", error.statusCode);
 
@@ -148,10 +153,10 @@ export const placeOrderRazorpay = async (req, res) => {
     console.log("Code:", error.error?.code);
 
     return res.status(500).json({
-        success: false,
-        message: error.error?.description || "Unknown Razorpay error"
+      success: false,
+      message: error.error?.description || "Unknown Razorpay error",
     });
-}
+  }
 };
 
 export const verifyPayment = async (req, res) => {
@@ -210,13 +215,15 @@ export const getUserOrders = async (req, res) => {
     })
       .populate("items.product address")
       .sort({ createdAt: -1 });
+
     if (!orders) {
       return res.json({ success: false, message: "No orders found" });
     }
-    res.json({ success: true, orders });
+
+    return res.json({ success: true, orders });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 

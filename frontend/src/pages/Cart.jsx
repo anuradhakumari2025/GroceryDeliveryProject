@@ -70,6 +70,8 @@ const Cart = () => {
           address: selectedAddress._id,
         });
 
+        console.log("COD Order Response:", data); // Debugging
+
         if (data.success) {
           toast.success(data.message);
           setCartItems({});
@@ -179,7 +181,7 @@ const Cart = () => {
     try {
       const { data } = await axios.get("/cart/get");
       if (data.success) {
-        console.log(data.cartItems)
+        // console.log(data.cartItems)
         setCartItems(data.cartItems); // Update cartItems in context
       } else {
       return  toast.error(data.message);

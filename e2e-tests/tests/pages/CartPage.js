@@ -6,7 +6,7 @@ export class CartPage {
     this.cartButton = page.locator('img[alt="cart"]');
     this.addToCartButton = page.locator('button:has-text("Add to Cart")');
   }
-
+  
   // Dynamically find the product image based on its unique alt text
   async getProductImage(productAltText) {
     const locator = this.page.locator(`img[alt="${productAltText}"]`);
