@@ -15,9 +15,15 @@ test("Test @checkout Flow", async ({ page }) => {
 
   await addProductToCart(page, productData.fruits.name);
 
+  console.log("Product added to cart: ",await page.url());
+  await page.screenshot({ path: "after-place-order.png", fullPage: true });
+
   const checkoutPage = new CheckoutPage(page);
 
   await checkoutPage.clickCartButton();
+
+  console.log("Clicked on cart button: ", await page.url());
+  await page.screenshot({ path: "after-place-order.png", fullPage: true });
 
   await checkoutPage.clickChangeButton();
 
@@ -40,12 +46,17 @@ test("Test @checkout Flow", async ({ page }) => {
 
   await checkoutPage.submitAddressForm();
 
+  console.log("Address submitted: ", await page.url());
+  await page.screenshot({ path: "after-place-order.png", fullPage: true });
+
   const toastMessage1 = page.getByText("Address added successfully");
   await expect(toastMessage1).toBeVisible();
 
   await checkoutPage.clickPlaceOrderButton();
 
-  await page.waitForTimeout(2000);
+  // await page.waitForTimeout(2000);
+  console.log("Place order clicked: ", await page.url());
+  await page.screenshot({ path: "after-place-order.png", fullPage: true });
 
   const toastMessage2 = page.getByText("Order placed successfully");
   await expect(toastMessage2).toBeVisible({
