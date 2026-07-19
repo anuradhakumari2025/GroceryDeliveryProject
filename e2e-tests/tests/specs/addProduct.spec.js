@@ -13,7 +13,7 @@ test("Should successfully @add-product", async ({ page }) => {
 
   await page.goto(`${testData.baseUrl}/seller`);
 
-  const guavaImagePath = path.resolve(__dirname, "../../assets/guava.png");
+  const guavaImagePath = path.resolve(__dirname, "../../assets/shake.jfif");
 
   await page.locator("#image0").setInputFiles(guavaImagePath);
 

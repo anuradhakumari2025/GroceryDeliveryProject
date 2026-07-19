@@ -39,7 +39,6 @@ import pepsi_image from "./pepsi_image.png";
 import wheat_flour_image from "./wheat_flour_image.png";
 import cheese_image from "./cheese_image.png";
 import eggs_image from "./eggs_image.png";
-import paneer_image_2 from "./paneer_image_2.png";
 import sprite_image_1 from "./sprite_image_1.png";
 import fanta_image_1 from "./fanta_image_1.png";
 import seven_up_image_1 from "./seven_up_image_1.png";
@@ -197,22 +196,6 @@ export const dummyProducts = [
       "Farm fresh",
       "Rich in protein",
       "Ideal for breakfast and baking",
-    ],
-    createdAt: "2025-03-25T07:17:46.018Z",
-    updatedAt: "2025-03-25T07:18:13.103Z",
-    inStock: true,
-  },
-  {
-    _id: "ek59j90k",
-    name: "Paneer 200g",
-    category: "Dairy",
-    price: 90,
-    offerPrice: 85,
-    image: [paneer_image_2],
-    description: [
-      "Soft and fresh",
-      "Rich in protein",
-      "Ideal for curries and snacks",
     ],
     createdAt: "2025-03-25T07:17:46.018Z",
     updatedAt: "2025-03-25T07:18:13.103Z",
