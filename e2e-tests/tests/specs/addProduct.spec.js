@@ -1,17 +1,19 @@
 import { test, expect } from "@playwright/test";
 import testData from "../data/credentials.env.json";
 import productData from "../data/products.json";
+import { AddProductPage } from "../pages/AddProductPage";
 import path from "path";
 
 // Test file to use the logged-in seller cookies
 test.use({ storageState: "playwright/.auth/seller.json" });
 
 test("Should successfully @add-product", async ({ page }) => {
+  const addProductPage = new AddProductPage(page);
   const product = productData.newProduct;
 
   await page.goto(`${testData.baseUrl}/seller`);
 
-  const guavaImagePath = path.resolve(__dirname, "../../assets/lotus.jfif");
+  const guavaImagePath = path.resolve(__dirname, "../../assets/guava.png");
 
   await page.locator("#image0").setInputFiles(guavaImagePath);
 
@@ -29,14 +31,5 @@ test("Should successfully @add-product", async ({ page }) => {
 
   await page.locator('button[type="submit"]').click();
 
-  const loader = page.locator(".animate-spin").first();
-
-  await expect(loader).toBeVisible();
-  await expect(loader).toBeHidden();
-
-  const toastMessage = await page.getByText("Product added successfully");
-
-  await expect(toastMessage).toBeVisible();
-
-  await expect(toastMessage).toBeHidden();
+  await addProductPage.verifySuccessState();
 });

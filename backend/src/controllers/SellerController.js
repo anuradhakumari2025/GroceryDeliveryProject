@@ -5,6 +5,7 @@ export const sellerLogin = async (req, res) => {
   if (!email || !password) {
     return res.json({ success: false, message: "Please fill all fields" });
   }
+
   try {
     if (
       email === process.env.SELLER_EMAIL &&
@@ -13,12 +14,14 @@ export const sellerLogin = async (req, res) => {
       const token = jwt.sign({ email }, process.env.JWT_SECRET, {
         expiresIn: "7d",
       });
+
       res.cookie("sellerToken", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
+
       return res.json({
         success: true,
         message: "Seller logged in successfully",
@@ -28,7 +31,7 @@ export const sellerLogin = async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -37,7 +40,7 @@ export const isSellerAuth = async (req, res) => {
     return res.json({ success: true });
   } catch (error) {
     console.error(error);
-    res.json({ success: false, message: error.message });
+   return res.json({ success: false, message: error.message });
   }
 };
 
@@ -48,9 +51,13 @@ export const sellerLogout = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     });
-    return res.json({ success: true, message: "Seller logged out successfully" });
+
+    return res.json({
+      success: true,
+      message: "Seller logged out successfully",
+    });
   } catch (error) {
     console.error(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
-}
+};
