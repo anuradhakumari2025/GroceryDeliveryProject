@@ -1,6 +1,5 @@
 import React from "react";
 import { assets, footerLinks } from "../assets/greencart_assets/assets";
-import { data } from "react-router";
 
 const Footer = () => {
   return (
@@ -9,7 +8,7 @@ const Footer = () => {
         <div>
           <img src={assets.logo} className="w-34 md:w-32" alt="" />
           <p className="max-w-[410px] mt-6">
-          At FreshBasket, we’re committed to delivering the highest quality groceries straight to your doorstep — fresh produce, trusted brands, and everyday essentials, all at your fingertips
+          At FreshBasket, we&apos;re committed to delivering the highest quality groceries straight to your doorstep — fresh produce, trusted brands, and everyday essentials, all at your fingertips
           </p>
         </div>
         <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5 ">
@@ -32,7 +31,7 @@ const Footer = () => {
         </div>
       </div>
       <p className="py-4 text-center text-sm md:text-base text-gray-500/80">
-        Copyright {new Date().getFullYear()} © Anuradha All Right Reserved
+        Copyright {new Date().getFullYear()} &copy; Anuradha All Right Reserved
       </p>
     </div>
   );

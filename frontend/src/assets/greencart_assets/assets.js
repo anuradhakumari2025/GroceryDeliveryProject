@@ -169,10 +169,10 @@ export const footerLinks = [
   {
     title: "Follow Us",
     links: [
-      { text: "Instagram", url: "#" },
-      { text: "Twitter", url: "#" },
-      { text: "Facebook", url: "#" },
-      { text: "YouTube", url: "#" },
+      { text: "Instagram", url: "https://www.instagram.com/anuradha.bright.star/" },
+      { text: "Twitter", url: "https://x.com/AnuradhaKu49430" },
+      { text: "Linkedin", url: "https://www.linkedin.com/in/anuradhakumari2025/" },
+      { text: "YouTube", url: "https://www.youtube.com/@1anu_ra-dha." },
     ],
   },
 ];

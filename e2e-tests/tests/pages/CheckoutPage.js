@@ -1,7 +1,6 @@
 export class CheckoutPage {
   constructor(page) {
     this.page = page;
-    this.url = "/cart";
     this.cartButton = page.locator('img[alt="cart"]');
     this.changeButton = page.locator('button:has-text("Change")');
     this.addAddressButton = page.locator('p:has-text("Add Address")');

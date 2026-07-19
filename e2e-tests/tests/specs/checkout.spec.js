@@ -3,6 +3,7 @@ import testData from "../data/credentials.env.json";
 import { CheckoutPage } from "../pages/CheckoutPage";
 import { addProductToCart } from "../../helpers/addProductToCart";
 import productData from "../data/products.json";
+import { placeOrder } from "../../helpers/placeOrder";
 
 test.use({
   storageState: "playwright/.auth/user.json",
@@ -23,7 +24,6 @@ const address = {
 };
 
 test("Test @checkout Flow", async ({ page }) => {
-  
   /*
   page.on("console", async (msg) => {   
     console.log("================================");
@@ -47,35 +47,6 @@ test("Test @checkout Flow", async ({ page }) => {
     console.log("REQUEST FAILED:", request.url(), request.failure()?.errorText);
   });
   */
-  
 
-  await page.goto(`${baseUrl}`);
-
-  await addProductToCart(page, productData.fruits.name);
-
-  const checkoutPage = new CheckoutPage(page);
-
-  await checkoutPage.clickCartButton();
-
-  await checkoutPage.clickChangeButton();
-
-  await checkoutPage.clickAddAddressButton();
-  await expect(page).toHaveURL(`${baseUrl}/add-address`);
-
-  await checkoutPage.fillAddressForm(address);
-
-  await checkoutPage.submitAddressForm();
-
-  const toastMessage1 = page.getByText("Address added successfully");
-  await expect(toastMessage1).toBeVisible();
-  await page.waitForURL(`${baseUrl}/cart`);
-  await page.waitForLoadState("networkidle");
-
-  await expect(
-    page.getByRole("button", { name: /Place Order|Proceed to Checkout/ }),
-  ).toBeVisible();
-  await checkoutPage.clickPlaceOrderButton();
-
-  const toastMessage2 = page.getByText("Order placed successfully");
-  await expect(toastMessage2).toBeVisible();
+  await placeOrder(page, baseUrl, productData.fruits.name);
 });
