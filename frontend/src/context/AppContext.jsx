@@ -30,7 +30,7 @@ export const AppContextProvider = ({ children }) => {
     } catch (error) {
       setIsSeller(false);
       console.log(error);
-      toast.error(error.message);
+      return toast.error(error.message);
     }
   };
 
@@ -42,13 +42,11 @@ export const AppContextProvider = ({ children }) => {
         // console.log("Products fetched successfully",data.products);
         setProducts(data.products);
       } else {
-        toast.error(data.message);
-        return;
+        return toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
-      return;
+      return toast.error(error.message);
     }
   };
 
@@ -82,14 +80,14 @@ export const AppContextProvider = ({ children }) => {
     try {
       const response = await axios.post(
         "/cart/update",
-        { cartItems: cartData }, 
-        { headers: { token: localStorage.getItem("token") } }, 
+        { cartItems: cartData },
+        { headers: { token: localStorage.getItem("token") } },
       );
 
       if (response.data.success) {
         toast.success("Item added to cart");
       } else {
-        toast.error(response.data.message || "Failed to update cart");
+        return toast.error(response.data.message || "Failed to update cart");
       }
     } catch (error) {
       console.error("Backend sync failed:", error);
@@ -147,7 +145,7 @@ export const AppContextProvider = ({ children }) => {
         const { data } = await axios.post("/cart/update", { cartItems });
         // console.log(data)
         if (!data.success) {
-          toast.error(data.message);
+          return toast.error(data.message);
         }
       } catch (error) {
         console.log(error);
@@ -168,6 +166,7 @@ export const AppContextProvider = ({ children }) => {
     showUserLogin,
     setShowUserLogin,
     products,
+    setProducts,
     currency,
     addToCart,
     updateCart,
@@ -181,7 +180,7 @@ export const AppContextProvider = ({ children }) => {
     axios,
     fetchProducts,
   };
-  
+
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 

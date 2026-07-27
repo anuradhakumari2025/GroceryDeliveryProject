@@ -7,21 +7,25 @@ import toast from "react-hot-toast";
 const SellerLayout = () => {
   const { setIsSeller, navigate, axios } = useAppContext();
 
+  // Check karein ki kya user abhi update page par hai
+  const isUpdating = location.pathname.startsWith("/seller/update/");
+
   const logout = async () => {
     try {
       const { data } = await axios.get("/seller/logout");
       if (data.success) {
         setIsSeller(false);
         toast.success(data.message);
-        navigate("/");
+        navigate("/seller/login");
       } else {
         toast.error(data.message);
       }
     } catch (error) {
       console.log(error);
+      return toast.error(error.message);
     }
   };
-  
+
   return (
     <>
       <div className="flex justify-between items-center md:px-8 border-gray-300 px-4 sm:px-10 py-3 border-b transition-all duration-300 bg-white">
@@ -29,7 +33,7 @@ const SellerLayout = () => {
           <img
             className="w-34 md:w-38 cursor-pointer"
             src={assets.logo}
-            alt=""
+            alt="Logo"
           />
         </div>
         <div className="flex items-center gap-4 text-gray-500">
@@ -48,17 +52,20 @@ const SellerLayout = () => {
         <div className="md:w-64 w-16 h-[95vh] text-base border-gray-300 pt-4 flex flex-col bg-white border-r">
           <NavLink
             className={({ isActive }) =>
-              `flex items-center gap-3 py-3 px-4 cursor-pointer  duration-200 ${
-                isActive
+              `flex items-center gap-3 py-3 px-4 cursor-pointer duration-200 ${
+                isActive || isUpdating
                   ? "border-r-4 md:border-r-[6px] border-primary bg-primary/10 text-primary"
                   : "hover:bg-gray-100/90 border-white"
               }`
             }
-            to={"/seller"}
-            end={"/seller"}
+            to={isUpdating ? location.pathname : "/seller"}
+            end
           >
             <img src={assets.add_icon} alt="" />
-            <p className="hidden md:block text-center">Add Product</p>
+            {/* Dynamic text change */}
+            <p className="hidden md:block text-center">
+              {isUpdating ? "Update Product" : "Add Product"}
+            </p>
           </NavLink>
 
           <NavLink

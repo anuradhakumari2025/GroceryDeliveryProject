@@ -22,7 +22,7 @@ import Register from "./components/Register";
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("/seller");
   const { isSeller } = useAppContext();
-  
+
   return (
     <div className="text-default bg-white text-gray-700 min-h-screen">
       {isSellerPath ? null : <Navbar />}
@@ -40,21 +40,30 @@ const App = () => {
           <Route path="/my-orders" element={<MyOrders />} />
 
           {/* Seller Routes Configured for Auto-Redirection */}
-          <Route 
-            path="/seller" 
-            element={isSeller ? <SellerLayout /> : <Navigate to="/seller/login" replace />}
-          >
+          <Route
+            path="/seller"
+            element={
+              isSeller ? (
+                <SellerLayout />
+              ) : (
+                <Navigate to="/seller/login" replace />
+              )
+            }
+          >/
             <Route index element={<AddProduct />} />
             <Route path="product-list" element={<ProductList />} />
+
+            <Route path="update/:id" index element={<AddProduct />} />
             <Route path="orders" element={<Orders />} />
           </Route>
-          
-          {/* Public Seller Login Route */}
-          <Route 
-            path="/seller/login" 
-            element={!isSeller ? <SellerLogin /> : <Navigate to="/seller" replace />} 
-          />
 
+          {/* Public Seller Login Route */}
+          <Route
+            path="/seller/login"
+            element={
+              !isSeller ? <SellerLogin /> : <Navigate to="/seller" replace />
+            }
+          />
         </Routes>
       </div>
       {!isSellerPath && <Footer />}

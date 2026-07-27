@@ -193,7 +193,7 @@ Manage orders
 
 ## 🤖 E2E Testing /e2e-tests
 
-This section contains the automated end-to-end testing suite built using **Playwright**, **TypeScript**, and **Node.js** to validate the core user flows of the Grocery Delivery application.
+This section contains the automated end-to-end test suite built with **Playwright** and **Node.js** to validate the main buyer, seller, and checkout flows of the Grocery Delivery application.
 
 ### 📂 Automation Folder Structure
 
@@ -201,19 +201,49 @@ This section contains the automated end-to-end testing suite built using **Playw
 GroceryDeliveryProject/
 └── e2e-tests/
     ├── tests/
-    │   └── login.spec.js        # Core login & authentication test suite
-    ├── playwright-report/       # Generated HTML test execution reports (Git ignored)
-    ├── test-results/            # Visual artifacts like traces/screenshots (Git ignored)
-    ├── package.json             # Playwright dependencies & scripts
-    └── playwright.config.js     # Global Playwright configuration engine
+    │   ├── auth/
+    │   │   ├── seller.setup.js
+    │   │   └── user.setup.js
+    │   ├── pages/
+    │   ├── specs/
+    │   │   ├── addProduct.spec.js
+    │   │   ├── auth.spec.js
+    │   │   ├── cart.spec.js
+    │   │   ├── checkout.spec.js
+    │   │   ├── invalidLogin.spec.js
+    │   │   ├── invalidRegister.spec.js
+    │   │   ├── order.spec.js
+    │   │   └── searchProduct.spec.js
+    │   └── data/
+    ├── playwright-report/
+    ├── test-results/
+    ├── package.json
+    └── playwright.config.js
 ```
 
 ### 🔑 Automated Test Scenarios Covered
 
-1. **User Authentication Flow (`login.spec.js`)**
-   - Validates successful login using valid user credentials.
-   - Asserts redirection to the dashboard/home page post-login.
-   - [Optional: Add any error handling tests you wrote here, e.g., "Validates error messages for invalid passwords."]
+1. **Seller Authentication Setup**
+   - Logs in as seller using stored session state for protected seller flows.
+
+2. **User Authentication Flow (`auth.spec.js`)**
+   - Validates user registration and login.
+   - Verifies successful navigation after authentication.
+
+3. **Invalid Login & Registration Tests**
+   - `invalidLogin.spec.js` checks invalid credentials and unregistered users.
+   - `invalidRegister.spec.js` checks duplicate emails, weak passwords, and empty fields.
+
+4. **Product Management**
+   - `addProduct.spec.js` validates seller product creation using a sample image upload.
+
+5. **Cart & Search Experience**
+   - `cart.spec.js` checks product addition to cart flow.
+   - `searchProduct.spec.js` validates product search behavior.
+
+6. **Checkout & Order Flow**
+   - `checkout.spec.js` tests address entry and order placement.
+   - `order.spec.js` verifies order-related user actions.
 
 ### 🛠️ How to Run the Automation Tests Locally
 
@@ -229,19 +259,32 @@ GroceryDeliveryProject/
    npm install
    ```
 
-3. **Execute all tests in headless mode (default):**
+3. **Install Playwright browsers:**
+
+   ```bash
+   npx playwright install
+   ```
+
+4. **Execute all tests in headless mode (default):**
 
    ```bash
    npx playwright test
    ```
 
-4. **Execute tests with visual browser UI (Headed mode):**
+5. **Execute a specific spec:**
+
+   ```bash
+   npx playwright test tests/specs/addProduct.spec.js
+   ```
+
+6. **Execute tests with visual browser UI (Headed mode):**
 
    ```bash
    npx playwright test --headed
    ```
 
-5. **View the interactive HTML test execution report:**
+7. **View the interactive HTML test execution report:**
+
    ```bash
    npx playwright show-report
    ```

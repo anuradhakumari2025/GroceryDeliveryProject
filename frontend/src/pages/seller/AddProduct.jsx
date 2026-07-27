@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import { assets, categories } from "../../assets/greencart_assets/assets";
+import { useLocation } from "react-router";
 
 const AddProduct = () => {
-  const { axios } = useAppContext();
-  const [files, setFiles] = useState([]);
+  const { axios, navigate } = useAppContext();
+  const [images, setImages] = useState([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [price, setPrice] = useState("");
   const [offerPrice, setOfferPrice] = useState("");
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
+
+  const updateProduct = location.state?.productData;
 
   const handleSubmit = async (e) => {
     try {
@@ -21,40 +25,78 @@ const AddProduct = () => {
       const productData = {
         name,
         description: description.split("\n"),
+        // description,
         category,
         price,
         offerPrice,
       };
       // console.log("Product Data: from frontend", productData);
       const formData = new FormData();
+      // console.log("product data to be submitted ", productData);
       formData.append("productData", JSON.stringify(productData));
 
-      for (let file of files) {
-        if (file && file != "undefined") {
-          formData.append("images", file);
+      // Loop through images array
+      for (let item of images) {
+        if (!item) continue;
+
+        if (item instanceof File) {
+          // 🟢 Send new local files to backend storage
+          formData.append("images", item);
+        } else if (typeof item === "string") {
+          // 🟢 Optional: Send existing URLs so your backend knows to keep them
+          await formData.append("images", item);
         }
       }
 
-      const { data } = await axios.post("/product/add", formData);
-
-      if (data.success) {
-        setName("");
-        setDescription("");
-        setCategory("");
-        setPrice("");
-        setOfferPrice("");
-        setFiles([]);
-        toast.success(data.message);
+      if (updateProduct) {
+        const { data } = await axios.put(
+          `/product/update/${updateProduct?._id}`,
+          formData,
+        );
+        if (data.success) {
+          // console.log(data.product);
+          navigate("/seller/product-list");
+        } else {
+          return toast.error(data.message);
+        }
       } else {
-        toast.error(data.message);
+        const { data } = await axios.post("/product/add", formData);
+
+        if (data.success) {
+          setName("");
+          setDescription("");
+          setCategory("");
+          setPrice("");
+          setOfferPrice("");
+          setImages([]);
+          toast.success(data.message);
+          navigate("/seller/product-list");
+        } else {
+          return toast.error(data.message);
+        }
       }
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+      return toast.error(error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  // Agar editProduct mila, toh form fields ko fill kar do
+  useEffect(() => {
+    if (updateProduct) {
+      // console.log(updateProduct);
+      setName(updateProduct?.name);
+      setDescription(updateProduct?.description.join("\n"));
+      setCategory(updateProduct?.category);
+      setPrice(updateProduct?.price);
+      setOfferPrice(updateProduct?.offerPrice);
+      if (updateProduct.image && Array.isArray(updateProduct.image)) {
+        setImages(updateProduct.image);
+      }
+    }
+  }, [updateProduct]);
 
   return (
     <div className="no-scrollbar flex-1 h-[95vh] overflow-y-scroll flex flex-col justify-between">
@@ -66,29 +108,49 @@ const AddProduct = () => {
             {Array(4)
               .fill("")
               .map((_, index) => (
-                <label htmlFor={`image${index}`} key={index}>
-                  <input
-                    key={index}
-                    id={`image${index}`}
-                    type="file"
-                    hidden
-                    onChange={(e) => {
-                      const updatedFiles = [...files];
-                      updatedFiles[index] = e.target.files[0];
-                      setFiles(updatedFiles);
-                    }}
-                  />
-                  <img
-                    name="product-image"
-                    className="max-w-24 cursor-pointer"
-                    src={
-                      files[index]
-                        ? URL.createObjectURL(files[index])
-                        : assets.upload_area
-                    }
-                    alt=""
-                  />
-                </label>
+                <div key={index} className="relative group">
+                  <label htmlFor={`image${index}`}>
+                    <input
+                      id={`image${index}`}
+                      type="file"
+                      hidden
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          const updatedimages = [...images];
+                          updatedimages[index] = e.target.files[0];
+                          setImages(updatedimages);
+                        }
+                      }}
+                    />
+                    <img
+                      name="product-image"
+                      className="max-w-24 h-24 object-cover cursor-pointer border rounded"
+                      src={
+                        images[index] instanceof File
+                          ? URL.createObjectURL(images[index])
+                          : typeof images[index] === "string"
+                            ? images[index]
+                            : assets.upload_area
+                      }
+                      alt=""
+                    />
+                  </label>
+
+                  {/* 🟢 NEW: Delete Button appears if an image exists */}
+                  {images[index] && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updatedimages = [...images];
+                        updatedimages[index] = null; // Clear this specific slot
+                        setImages(updatedimages);
+                      }}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs cursor-pointer shadow hover:bg-red-600"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
               ))}
           </div>
         </div>
@@ -200,8 +262,10 @@ const AddProduct = () => {
               <div className="w-full h-screen absolute top-0 right-0 left-0 bg-black/70">
                 <div className="border-t-blue-600 w-10 h-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full border-4"></div>
               </div>
-              Adding...
+              {updateProduct ? "Updating..." : "Adding..."}
             </>
+          ) : updateProduct ? (
+            "UPDATE"
           ) : (
             "ADD"
           )}

@@ -8,18 +8,18 @@ import sellerRouter from "./routes/SellerRoute.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-
 const app = express();
 
-
 //allow multiple origins
-const allowedOrigins = ["http://localhost:5173","https://grocery-delivery-project-alpha.vercel.app"];
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://grocery-delivery-project-alpha.vercel.app",
+];
 
 //Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
-
 
 app.use("/api/user", userRouter);
 app.use("/api/seller", sellerRouter);
