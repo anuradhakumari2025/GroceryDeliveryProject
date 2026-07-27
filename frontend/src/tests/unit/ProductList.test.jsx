@@ -2,27 +2,27 @@ import { render, screen } from "@testing-library/react";
 // import userEvent from "@testing-library/user-event";
 import ProductList from "../../pages/seller/ProductList";
 // import { toast } from "react-hot-toast";
-import { jest, describe, test, expect } from "@jest/globals";
+import { vi, describe, test, expect } from "vitest";
 
-const mockNavigate = jest.fn();
+const mockNavigate = vi.fn();
 
-jest.mock("react-hot-toast", () => ({
+vi.mock("react-hot-toast", () => ({
   toast: {
-    success: jest.fn(),
-    error: jest.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
   },
 }));
 
-const mockFetchProducts = jest.fn();
-const mockSetProducts = jest.fn();
+const mockFetchProducts = vi.fn();
+const mockSetProducts = vi.fn();
 
 const mockAxios = {
-  get: jest.fn(),
-  delete: jest.fn(),
-  post: jest.fn(),
+  get: vi.fn(),
+  delete: vi.fn(),
+  post: vi.fn(),
 };
 
-jest.mock("../../context/AppContext", () => ({
+vi.mock("../../context/AppContext", () => ({
   useAppContext: () => ({
     currency: "₹",
     navigate: mockNavigate,
@@ -35,6 +35,7 @@ jest.mock("../../context/AppContext", () => ({
         _id: "1",
         name: "Eggs",
         category: "Dairy",
+        price: 140,
         offerPrice: 120,
         image: [
           "C://vsCodeFolder/GroceryDeliveryProject/frontend/src/assets/greencart_assets/eggs_image.png",
@@ -49,6 +50,6 @@ describe("ProductList", () => {
   test("renders product name", () => {
     render(<ProductList />);
 
-    expect(screen.getByText("Apple")).toBeInTheDocument();
+    expect(screen.getByText("Eggs")).toBeInTheDocument();
   });
 });
