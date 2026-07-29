@@ -249,6 +249,7 @@ const AddProduct = () => {
 
         {/* Submit Button */}
         <button
+          data-testid="submit-product"
           type="submit"
           disabled={loading}
           className={`mt-4 px-8 font-medium py-2 rounded text-white ${

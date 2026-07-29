@@ -32,4 +32,6 @@ test("Should successfully @add-product", async ({ page }) => {
   await page.locator('button[type="submit"]').click();
 
   await addProductPage.verifySuccessState();
+
+  await expect(page).toHaveURL("/product/list");
 });
