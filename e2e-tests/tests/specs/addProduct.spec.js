@@ -33,5 +33,5 @@ test("Should successfully @add-product", async ({ page }) => {
 
   await addProductPage.verifySuccessState();
 
-  await expect(page).toHaveURL("/product/list");
+  await expect(page).toHaveURL("/seller/product-list");
 });
