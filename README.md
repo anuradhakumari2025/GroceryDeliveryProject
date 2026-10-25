@@ -18,6 +18,12 @@ A full-stack **Grocery Delivery Web App** that allows users to browse grocery it
   <em>All Products</em>
 </p>
 
+<p align="center">
+  <img src="./Photos/CartPage.png" width="80%" alt="Cart and Checkout Preview" />
+  <br>
+  <em>Cart Page & Checkout System</em>
+</p>
+
 ---
 
 ## 📁 Folder Structure
