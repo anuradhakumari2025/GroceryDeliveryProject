@@ -4,6 +4,22 @@ A full-stack **Grocery Delivery Web App** that allows users to browse grocery it
 
 ---
 
+## 📸 Screenshots & Previews
+
+<p align="center">
+  <img src="./Photos/LandingPage.png" width="80%" alt="User Dashboard Preview" />
+  <br>
+  <em>Landing Page</em>
+</p>
+
+<p align="center">
+  <img src="./Photos/AllProducts.png" width="80%" alt="All Product Preview" />
+  <br>
+  <em>All Products</em>
+</p>
+
+---
+
 ## 📁 Folder Structure
 
 Frontend /frontend
@@ -309,3 +325,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 📄 License
 This project is licensed under the MIT License.
+
